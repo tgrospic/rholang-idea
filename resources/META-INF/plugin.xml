@@ -1,0 +1,41 @@
+<idea-plugin>
+  <id>coop.rchain.lang</id>
+  <name>RHOlang</name>
+  <version>0.0.1</version>
+  <vendor email="grospic@gmail.com" url="https://rchain.coop">RChain.coop</vendor>
+
+  <description><![CDATA[
+      Language support for <b><a href="https://github.com/rchain/Rholang">RHOlang</a></b>.
+
+      <em>Official language for <a href="https://www.rchain.coop">RChain</a> distributed virtual machine.<br><br>
+    ]]></description>
+
+  <change-notes><![CDATA[
+    <ul>
+        <li><b>0.0.1</b>: Syntax highlighting and comments support. Initial version.</li>
+    </ul>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="135.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <depends>com.intellij.modules.lang</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+    <fileTypeFactory implementation="coop.rchain.lang.RhoFileTypeFactory"/>
+    <lang.parserDefinition language="RHOlang" implementationClass="coop.rchain.lang.RhoParserDefinition"/>
+    <lang.syntaxHighlighterFactory language="RHOlang" implementationClass="coop.rchain.lang.RhoSyntaxHighlighterFactory"/>
+    <lang.commenter language="RHOlang" implementationClass="coop.rchain.lang.RhoCommenter"/>
+    <colorSettingsPage implementation="coop.rchain.lang.RhoColorSettingsPage"/>
+    <annotator language="RHOlang" implementationClass="coop.rchain.lang.RhoHighlightingAnnotator"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>

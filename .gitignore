@@ -1,0 +1,5 @@
+out/
+.idea/workspace.xml
+gen/
+*.java~
+/*.jar

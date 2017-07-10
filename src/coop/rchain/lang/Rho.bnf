@@ -1,0 +1,231 @@
+{
+  parserClass="coop.rchain.lang.RhoParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Rho"
+  psiImplClassSuffix="Impl"
+  psiPackage="coop.rchain.lang.psi"
+  psiImplPackage="coop.rchain.lang.psi.impl"
+
+  elementTypeHolderClass="coop.rchain.lang.psi.RhoTypes"
+  elementTypeClass="coop.rchain.lang.psi.RhoElementType"
+  tokenTypeClass="coop.rchain.lang.psi.RhoTokenType"
+
+  tokens = [
+    CONTRACT = "contract"
+    SELECT = "select"
+    MATCH = "match"
+    TOTAL = "total"
+    CASE = "case"
+    WITH = "with"
+    DEF = "def"
+    FOR = "for"
+    LET = "let"
+    NEW = "new"
+    SUM = "sum"
+    IF = "if"
+    IN = "in"
+    FALSE = "false"
+    TRUE = "true"
+    NIL = "Nil"
+
+    FAT_ARROW = "=>"
+    THIN_ARROW = "->"
+    DOT = "."
+
+    BITWISE_AND = "&"
+    BITWISE_OR = "|"
+    BITWISE_XOR = "^"
+
+    TRIPLE_DOT = "..."
+    DOUBLE_DOT = ".."
+    DOUBLE_COLON = "::"
+    COLON = ":"
+
+    PLUS = "+"
+    MINUS = "-"
+    MULTIPLY = "*"
+    DIVIDE = "/"
+    REMAINDER = "%"
+
+    ASSIGN_LEFT_SHIFT = "<<="
+    ASSIGN_RIGHT_SHIFT = ">>="
+    EQUAL = "=="
+    ASSIGN = "="
+    NOT_EQUAL = "!="
+    LESS_THAN_OR_EQUAL = "<="
+    LESS_THAN = "<"
+    GREATER_THAN_OR_EQUAL = ">="
+    GREATER_THAN = ">"
+
+    NOT = "!"
+    BOX = "~"
+    AT = "@"
+    SINGLE_QUOTE = "'"
+    DOLLAR = "$"
+
+    HASH = "#"
+    OPEN_SQUARE_BRACKET = "["
+    CLOSE_SQUARE_BRACKET = "]"
+    OPEN_PAREN = "("
+    CLOSE_PAREN = ")"
+    OPEN_BRACE = "{"
+    CLOSE_BRACE = "}"
+    COMMA = ","
+    SEMICOLON = ";"
+    UNDERSCORE = "_"
+
+    // Names and variables
+    ID_NAME = 'regexp: [A-Z][a-zA-Z0-9_]*'
+    ID_VAR  = 'regexp: [a-z][a-zA-Z0-9_]*'
+  ]
+
+//  psiImplUtilClass="coop.rchain.psi.impl.RhoPsiImplUtil"
+//  consumeTokenMethod("Proc.*|Proc")="consumeTokenFast"
+
+//  extends(".*Quantity")=Quantity
+}
+
+// Top level contract declaration
+Contract  ::= Contract_ ([";"] Contract_)*
+Contract_ ::= CONTRACT ContractName "(" [CPattern] ")" "=" "{" Proc "}"
+            | CONTRACT ContractName "=" TypeTerm
+            | comment
+
+ContractName ::= ID_NAME {
+  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+}
+
+// Primitive types
+private numericLit ::= '-'? (BIN_LIT | OCT_LIT | HEX_LIT | DEC_LIT)
+private stringLit ::= STRING_LIT | RAW_STRING_LIT | CHAR_LIT
+private comment ::= (BLOCK_COMMENT|BLOCK_DOC_COMMENT|LINE_COMMENT|LINE_DOC_COMMENT)
+
+// Processes
+Proc4 ::= NIL | Value
+Proc3 ::= ChanRefSymbol Chan ["(" [Proc] ")"]
+Proc2 ::= Chan "!" "(" [Proc] ")"
+Proc1 ::= SUM "(" Bind "/:" Bind ")" "{" Proc "}"
+        | TOTAL "(" Bind ":\\" Bind ")" "{" Proc "}"
+        | FOR "(" [Bind] ")" "{" Proc "}"
+        | SELECT "{" [CBranch] "}"
+        | MATCH Proc WITH [PMBranch]
+        | NEW [VarPattern] IN Proc
+        | LET ("(" CPattern ")" | CPattern) "=" Proc IN Proc
+        | ConstrName "(" [Proc] ")"
+        | ID_VAR "(" [Proc] ")"
+Proc_ ::= (FnDef | Proc1 | Proc2 | Proc3 | Proc4 | ConstrName) [TypePattern] | comment
+Proc  ::= Proc_ (("|" | ",")? Proc_)*
+
+ChanRefSymbol ::= "*"|"#" {
+  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+}
+
+// Experimental!
+FnDef ::= DEF FnName "(" [CPattern] ")" "=" "{" Proc "}"
+        | DEF FnName "=" TypeTerm
+
+FnName ::= ID_VAR {
+  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+}
+
+// Channels
+Chan ::= "@" Proc3 | ID_VAR ("." Proc)* {
+  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+}
+
+// Variable binding
+Bind_ ::= CPattern "<-" Chan IF Proc
+        | CPattern "<-" Chan
+        | ValPattern
+        | VarPattern
+Bind  ::= Bind_ (";" Bind_)*
+
+// Pattern match branches
+PMBranch_ ::= PPattern "=>" "{" Proc "}"
+PMBranch  ::= PMBranch_ PMBranch_*
+
+// Choice branch
+CBranch  ::= CBranch_ CBranch_*
+CBranch_ ::= CASE [Bind] "=>" "{" Proc "}"
+
+QVal ::= TRUE
+       | FALSE
+       | numericLit
+       | stringLit
+       | ID_VAR ("."? Proc)*
+
+// Quantity
+Quantity_ ::= ("-"|"+") Quantity_
+  | "(" [Proc] ")"
+  | "[" [Proc] "]"
+  | "{" [Proc] "}"
+  | QVal (("*"|"/"|"+"|"-"|"<="|"<"|">="|">"|"=="|"!="|"&&"|"||") Quantity_)*
+Quantity ::= Quantity_ ("," Quantity_)*
+
+// Values
+Value ::= Quantity
+
+// Variable patterns
+VarPattern  ::= VarPattern_ ("," VarPattern_)*
+VarPattern_ ::= (ID_VAR | "_") [TypePattern]
+
+// Process patterns
+PPattern4 ::= NIL | CPattern
+PPattern3 ::= "*" CPattern | "#" CPattern
+PPattern2 ::= CPattern "!" "(" [PPattern] ")" ;
+PPattern1 ::= FOR "(" [PatternBind] ")" "{" PPattern "}"
+            | MATCH PPattern WITH [PatternPatternMatch]
+            | NEW [VarPattern] IN PPattern1
+            | LET "(" CPattern ")" "=" PPattern IN PPattern1
+            | ConstrName "(" [PPattern] ")"
+PPattern_ ::= PPattern1 | PPattern2 | PPattern3 | PPattern4
+PPattern  ::= PPattern_ ("|" PPattern1)*
+
+TypeTerm ::= (ID_NAME | ID_VAR) [TypeGeneric] {
+  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+}
+TypeGeneric ::= "<" [TypeTerm] ">"
+              | "[" [TypeTerm] "]"
+              | "(" [TypeTerm_] ")"
+TypeTerm_ ::= TypeTerm ("," TypeTerm)*
+TypePattern ::= ":" TypeTerm
+
+// Channel patterns
+CPattern_ ::= VarPattern
+            | ValPattern
+            | "@" PPattern3
+            | "(" VarPattern ")"
+            | ID_NAME {
+  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+}
+CPattern  ::= CPattern_ ("," CPattern_ )*
+
+// Bind pattern
+PatternBind_ ::= CPattern "<-" CPattern
+PatternBind  ::= PatternBind_ (";" PatternBind_)*
+
+// Pattern match branch pattern
+PatternPatternMatch_ ::= PPattern "=>" "{" PPattern "}"
+PatternPatternMatch  ::= PatternPatternMatch_ PatternPatternMatch_*
+
+// Value patterns
+ValPattern_ ::= ID_VAR "{" [PPattern] "}"
+             | "<" [PPattern] ">"
+             | TRUE
+             | FALSE
+             | DEC_LIT
+             | STRING_LIT
+ValPattern  ::= ValPattern_ ("," ValPattern_)*
+
+ConstrName ::= ID_NAME {
+  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+}
