@@ -15,7 +15,7 @@ class RhoFileTypeFactory : FileTypeFactory() {
 class RhoFileType private constructor() : LanguageFileType(RhoLanguage.INSTANCE) {
 
   override fun getName(): String {
-    return "RHOlang file"
+    return "Rholang file"
   }
 
   override fun getDescription(): String {

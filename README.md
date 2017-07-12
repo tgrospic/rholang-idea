@@ -1,14 +1,14 @@
-# [RHOlang][rho-github] IntelliJ IDEA language plugin
+# [Rholang][rho-github] IntelliJ IDEA language plugin
 
 ![beta][beta-badge]
 
-This is the early stage of editor support for [RHOlang][rho-github]. :smile:
+This is the early stage of editor support for [Rholang][rho-github]. :smile:
 
-RHOlang is official language for [RChain][rchain-coop] distributed virtual machine. Is is currently in active development and syntax can slightly change. Current version of plugin follows this version of [RHO grammar][rho-bnf] and available examples.
+Rholang is official language for [RChain][rchain-coop] distributed virtual machine. Is is currently in active development and syntax can slightly change. Current version of plugin follows this version of [Rho grammar][rho-bnf] and available examples.
 
 I tried to make parser more forgiving so it can highlight wider range of correct programs. With more context information it could be much more precise. For now this will not recognize `*my_chan.ref[index]!(my_val)` although I'm not sure whether this is a valid syntax.
 
-I found interesting that many grammar rules have a strong gravity towards `Proc`ess :cyclone: but that should not be strange for π-calculus, _λ-expression_ is not the main _actor_ here. Which reminds me that RHOlang can be interesting to Erlang/Elixir programmers who knows how hard is to coordinate the names of processes. With _reflective higher-order_ super powers that comes with the compiler and type checker it will be pleasure to write smart contracts.
+I found interesting that many grammar rules have a strong gravity towards `Proc`ess :cyclone: but that should not be strange for π-calculus, _λ-expression_ is not the main _actor_ here. Which reminds me that Rholang can be interesting to Erlang/Elixir programmers who knows how hard is to coordinate the names of processes. With _reflective higher-order_ super powers that comes with the compiler and type checker it will be pleasure to write smart contracts.
 
 > The π-calculus is elegantly simple, it has very few terms and so is a very small language, yet is very expressive. Functional programs can be encoded into the π-calculus, and the encoding emphasises the dialogue nature of computation, drawing connections with game semantics. [Wikipedia][pi-wiki]
 
@@ -24,7 +24,7 @@ From IntelliJ IDEA [plugins repository][rho-idea] searchable inside the editor.
 
 Or download **rholang-idea.jar** from the latest [release][releases] and install through [File > Settings > Plugins][idea-install-from-disk] menu.
 
-## Contribute
+## [Contributing](./CONTRIBUTING.md)
 
 Any suggestions, bugs, testing, pull-requests, issues are very welcome.
 
@@ -37,7 +37,7 @@ Any suggestions, bugs, testing, pull-requests, issues are very welcome.
 - create new Plugin Run configuration with default setup
 - run/debug in a separate editor
 
-## TODO
+### TODO
 
 - write Formatter
 - write Completion Contributor

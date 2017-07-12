@@ -15,7 +15,7 @@ class RhoFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, RhoLan
   }
 
   override fun toString(): String {
-    return "RHOlang File"
+    return "Rholang File"
   }
 
   override fun getIcon(flags: Int): Icon? {

@@ -37,7 +37,7 @@ contract <CONTRACT>HelloWorld</CONTRACT>( <BIND_PARAMETER>world1</BIND_PARAMETER
 """
   }
 
-  override fun getDisplayName() = "RHOlang"
+  override fun getDisplayName() = "Rholang"
   override fun getIcon() = RhoIcons.DEFAULT
   override fun getAttributeDescriptors() = ATTRS
   override fun getColorDescriptors(): Array<ColorDescriptor> = ColorDescriptor.EMPTY_ARRAY
