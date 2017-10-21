@@ -92,8 +92,8 @@ HEX_LIT = "0x" [a-fA-F0-9_]+ {INT_SUFFIX}?
  	{HEX_LIT}                        { yybegin(YYINITIAL); return RhoTypes.HEX_LIT; }
  	[0-9] [0-9_]* "." /[^\.0-9e]     { yybegin(YYINITIAL); return RhoTypes.DEC_LIT; }
  	{DEC_LIT}                        { yybegin(YYINITIAL); return RhoTypes.DEC_LIT; }
-  [A-Z] [a-zA-Z0-9_']*             { yybegin(YYINITIAL); return RhoTypes.ID_NAME; }
-  [a-z] [a-zA-Z0-9_']*             { yybegin(YYINITIAL); return RhoTypes.ID_VAR; }
+  [a-zA-Z_] [a-zA-Z_0-9'-]*        { yybegin(YYINITIAL); return RhoTypes.ID_NAME; }
+//  [a-z] [a-zA-Z0-9_']*             { yybegin(YYINITIAL); return RhoTypes.ID_VAR; }
 
   "..."                            { yybegin(YYINITIAL); return RhoTypes.TRIPLE_DOT; }
   ".."                             { yybegin(YYINITIAL); return RhoTypes.DOUBLE_DOT; }
@@ -139,7 +139,8 @@ HEX_LIT = "0x" [a-fA-F0-9_]+ {INT_SUFFIX}?
   "}"                              { yybegin(YYINITIAL); return RhoTypes.CLOSE_BRACE; }
   ","                              { yybegin(YYINITIAL); return RhoTypes.COMMA; }
   ";"                              { yybegin(YYINITIAL); return RhoTypes.SEMICOLON; }
-  "_"                              { yybegin(YYINITIAL); return RhoTypes.UNDERSCORE; }
+// Underscore is part of an identifier ??
+//  "_"                              { yybegin(YYINITIAL); return RhoTypes.UNDERSCORE; }
 
   .                                { yybegin(YYINITIAL); return BAD_CHARACTER; }
 }
