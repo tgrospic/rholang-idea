@@ -88,10 +88,10 @@
 }
 
 // Top level contract declaration
-Contract  ::= Contract_ ([";"] Contract_)*
+
+Contract  ::= Proc
 Contract_ ::= CONTRACT ContractName "(" [CPattern] ")" "=" "{" Proc "}"
             | CONTRACT ContractName "=" TypeTerm
-            | comment
 
 ContractName ::= ID_NAME {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
@@ -109,13 +109,16 @@ Proc3 ::= ChanRefSymbol Chan ["(" [Proc] ")"]
 Proc2 ::= Chan "!" "(" [Proc] ")"
 Proc1 ::= SUM "(" Bind "/:" Bind ")" "{" Proc "}"
         | TOTAL "(" Bind ":\\" Bind ")" "{" Proc "}"
-        | FOR "(" [Bind] ")" "{" Proc "}"
+        | FOR "(" [Bind] ")" "{" [Proc] "}"
         | SELECT "{" [CBranch] "}"
         | MATCH Proc WITH [PMBranch]
+        | MATCH Proc { [PMBranch] }
+        | NEW [VarPattern] IN "{" Proc "}"
         | NEW [VarPattern] IN Proc
         | LET ("(" CPattern ")" | CPattern) "=" Proc IN Proc
         | ConstrName "(" [Proc] ")"
         | ID_VAR "(" [Proc] ")"
+        | Contract_
 Proc_ ::= (FnDef | Proc1 | Proc2 | Proc3 | Proc4 | ConstrName) [TypePattern] | comment
 Proc  ::= Proc_ (("|" | ",")? Proc_)*
 
@@ -165,6 +168,7 @@ Quantity_ ::= ("-"|"+") Quantity_
   | "(" [Proc] ")"
   | "[" [Proc] "]"
   | "{" [Proc] "}"
+  | "<" [Proc] ">"
   | QVal (("*"|"/"|"+"|"-"|"<="|"<"|">="|">"|"=="|"!="|"&&"|"||") Quantity_)*
 Quantity ::= Quantity_ ("," Quantity_)*
 
