@@ -77,5 +77,5 @@ Any feedback, suggestions, bugs, testing, pull-requests, issues are very welcome
 [idea-reference]: https://www.jetbrains.org/intellij/sdk/docs/tutorials/custom_language_support/reference_contributor.html
 [idea-plugin-actions]: https://www.jetbrains.org/intellij/sdk/docs/basics/action_system.html
 
-[beta-badge]: https://cdn.rawgit.com/tgrospic/rholang-idea/master/docs/beta.svg
+[beta-badge]: https://cdn.rawgit.com/tgrospic/rholang-idea/master/docs/beta-0.0.3.svg
 [license]: https://github.com/tgrospic/rholang-idea/blob/master/LICENSE
