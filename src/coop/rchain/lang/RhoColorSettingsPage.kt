@@ -17,21 +17,20 @@ class RhoColorSettingsPage : ColorSettingsPage, InspectionColorSettingsPage, Dis
  * with a focus on message-passing and formally modeled by the ρ-calculus,
  * a reflective, higher-order extension of the π-calculus.
 */
-contract <CONTRACT>HelloWorld</CONTRACT>( <BIND_PARAMETER>world1</BIND_PARAMETER> : <TYPE_PARAMETER>Channel<World></TYPE_PARAMETER>, <BIND_PARAMETER>world2</BIND_PARAMETER> ) = {
+new helloworld in {
+  contract <CONTRACT>helloworld</CONTRACT>( <BIND_PARAMETER>world</BIND_PARAMETER> ) = {
+      for( <BIND_PARAMETER>msg</BIND_PARAMETER> <- <PARAMETER>world</PARAMETER> ) {
+          // Hello from Rholang!
+          <CONSTRUCTOR>print</CONSTRUCTOR>( msg )
+      }
+  } |
   /*
    * It is designed to be used to implement protocols and "smart contracts"
    * on a general-purpose blockchain, but could be used in other settings as well.
   */
-  for( <BIND_PARAMETER>msg</BIND_PARAMETER> <- <PARAMETER>world1</PARAMETER> ) {
-    let <BIND_PARAMETER>magic_number</BIND_PARAMETER> = 4242424242424242 in
-    <PARAMETER>world2</PARAMETER>!( helloResponseFunction( msg, magic_number ) )
-  }
-
-  // RChain contracts are internally concurrent. They leverage a message-passing
-  // paradigm to optimize responsiveness, offering a more dynamic and sophisticated
-  // smart contract ecosystem.
-  def <FUNCTION>helloResponseFunction</FUNCTION>( msg : <TYPE_PARAMETER>String</TYPE_PARAMETER>, counter ) = {
-    <CONSTRUCTOR>CallMeBackConstructor</CONSTRUCTOR>( "Rho syntax highlighting demo. " + msg )
+  new world in {
+      <PARAMETER>helloworld</PARAMETER>!( world ) |
+      <PARAMETER>world</PARAMETER>!( "Hello World" )
   }
 }
 """
