@@ -1,7 +1,10 @@
-// A token contract that implements the ERC20 standard.
-// This contract demonstrates the creation of a token,
-// the transferring of tokens, the querying of a balance,
-// and the printing of the balance query result.
+// test
+/*
+ * A token contract that implements the ERC20 standard.
+ * This contract demonstrates the creation of a token,
+ * the transferring of tokens, the querying of a balance,
+ * and the printing of the balance query result.
+ */
 
 new token in {
     contract token (message_sender, total_supply, return_channel) = {

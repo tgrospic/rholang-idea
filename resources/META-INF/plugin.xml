@@ -1,13 +1,13 @@
 <idea-plugin>
-  <id>coop.coop.coop.rchain.lang</id>
+  <id>coop.rchain.lang</id>
   <name>Rholang</name>
   <version>0.0.3</version>
-  <vendor email="grospic@gmail.com" url="https://coop.coop">RChain.coop</vendor>
+  <vendor email="grospic@gmail.com" url="https://rchain.coop">RChain.coop</vendor>
 
   <description><![CDATA[
       Language support for <b><a href="https://github.com/rchain/Rholang">Rholang</a></b>.
 
-      <em>Official language for <a href="https://www.coop.coop">RChain</a> distributed virtual machine.<br><br>
+      <em>Official language for <a href="https://www.rchain.coop">RChain</a> distributed virtual machine.<br><br>
     ]]></description>
 
   <change-notes><![CDATA[
@@ -30,16 +30,18 @@
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
-  <depends>com.intellij.modules.coop.rchain.lang</depends>
+  <depends>com.intellij.modules.lang</depends>
 
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
-    <fileTypeFactory implementation="coop.rchain.coop.rchain.lang.RhoFileTypeFactory"/>
-    <coop.rchain.lang.parserDefinition language="Rholang" implementationClass="coop.rchain.coop.rchain.lang.RhoParserDefinition"/>
-    <coop.rchain.lang.syntaxHighlighterFactory language="Rholang" implementationClass="coop.rchain.coop.rchain.lang.RhoSyntaxHighlighterFactory"/>
-    <coop.rchain.lang.commenter language="Rholang" implementationClass="coop.rchain.coop.rchain.lang.RhoCommenter"/>
-    <colorSettingsPage implementation="coop.rchain.coop.rchain.lang.RhoColorSettingsPage"/>
-    <annotator language="Rholang" implementationClass="coop.rchain.coop.rchain.lang.RhoHighlightingAnnotator"/>
+    <fileTypeFactory implementation="coop.rchain.lang.RhoFileTypeFactory"/>
+    <lang.parserDefinition language="Rholang" implementationClass="coop.rchain.lang.RhoParserDefinition"/>
+    <lang.syntaxHighlighterFactory language="Rholang" implementationClass="coop.rchain.lang.RhoSyntaxHighlighterFactory"/>
+    <lang.commenter language="Rholang" implementationClass="coop.rchain.lang.RhoCommenter"/>
+    <lang.foldingBuilder language="Rholang" implementationClass="coop.rchain.lang.folding.RholangFoldingBuilder"/>
+
+    <colorSettingsPage implementation="coop.rchain.lang.RhoColorSettingsPage"/>
+    <annotator language="Rholang" implementationClass="coop.rchain.lang.RhoHighlightingAnnotator"/>
   </extensions>
 
   <actions>
