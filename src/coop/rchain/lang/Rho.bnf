@@ -90,8 +90,10 @@
 // Top level contract declaration
 
 Contract  ::= Proc
-Contract_ ::= CONTRACT ContractName "(" [CPattern] ")" "=" "{" Proc "}"
+Contract_ ::= CONTRACT ContractName "(" [CPattern] ")" "=" ProcBlock
             | CONTRACT ContractName "=" TypeTerm
+
+ProcBlock ::= "{" Proc "}"
 
 ContractName ::= ID_NAME {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
@@ -107,13 +109,13 @@ private comment ::= (BLOCK_COMMENT|BLOCK_DOC_COMMENT|LINE_COMMENT|LINE_DOC_COMME
 Proc4 ::= NIL | Value
 Proc3 ::= ChanRefSymbol Chan ["(" [Proc] ")"]
 Proc2 ::= Chan "!" "(" [Proc] ")"
-Proc1 ::= SUM "(" Bind "/:" Bind ")" "{" Proc "}"
-        | TOTAL "(" Bind ":\\" Bind ")" "{" Proc "}"
+Proc1 ::= SUM "(" Bind "/:" Bind ")" ProcBlock
+        | TOTAL "(" Bind ":\\" Bind ")" ProcBlock
         | FOR "(" [Bind] ")" "{" [Proc] "}"
         | SELECT "{" [CBranch] "}"
         | MATCH Proc WITH [PMBranch]
         | MATCH Proc { [PMBranch] }
-        | NEW [VarPattern] IN "{" Proc "}"
+        | NEW [VarPattern] IN ProcBlock
         | NEW [VarPattern] IN Proc
         | LET ("(" CPattern ")" | CPattern) "=" Proc IN Proc
         | ConstrName "(" [Proc] ")"
@@ -129,7 +131,7 @@ ChanRefSymbol ::= "*"|"#" {
 }
 
 // Experimental!
-FnDef ::= DEF FnName "(" [CPattern] ")" "=" "{" Proc "}"
+FnDef ::= DEF FnName "(" [CPattern] ")" "=" ProcBlock
         | DEF FnName "=" TypeTerm
 
 FnName ::= ID_NAME {
@@ -156,12 +158,12 @@ Bind_ ::= CPattern "<-" Chan IF Proc
 Bind  ::= Bind_ (";" Bind_)*
 
 // Pattern match branches
-PMBranch_ ::= PPattern "=>" "{" Proc "}"
+PMBranch_ ::= PPattern "=>" ProcBlock
 PMBranch  ::= PMBranch_ PMBranch_*
 
 // Choice branch
 CBranch  ::= CBranch_ CBranch_*
-CBranch_ ::= CASE [Bind] "=>" "{" Proc "}"
+CBranch_ ::= CASE [Bind] "=>" ProcBlock
 
 QVal ::= TRUE
        | FALSE

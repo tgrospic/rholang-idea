@@ -11,6 +11,11 @@ public class RholangCodeInsightTest extends LightCodeInsightFixtureTestCase {
   }
 
   public void testFolding(){
-    myFixture.testFolding(getTestDataPath() + "/ide/folding/blockDocComment.rho");
+    doTestFolding("blockDocComment");
+    doTestFolding("procedure");
+  }
+
+  private void doTestFolding(String testName){
+    myFixture.testFolding(getTestDataPath() + "/ide/folding/" + testName + ".rho");
   }
 }
