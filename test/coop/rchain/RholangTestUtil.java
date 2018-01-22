@@ -4,6 +4,6 @@ import com.intellij.openapi.application.PathManager;
 
 public class RholangTestUtil {
   public static String getBaseTestDataPath() {
-    return "testData";
+    return PathManager.getHomePath() + "/testData";
   }
 }
