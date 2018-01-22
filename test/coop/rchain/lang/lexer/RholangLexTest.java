@@ -17,7 +17,7 @@ public class RholangLexTest extends LexerTestCase {
 
   @Override
   protected String getDirPath() {
-    return Paths.get(RholangTestUtil.getBaseTestDataPath(), "lexer").toString();
+    return Paths.get(RholangTestUtil.getBaseTestDataPath(), "lexer").toString().substring(PathManager.getHomePath().length());
   }
 
   public void testToken() {
