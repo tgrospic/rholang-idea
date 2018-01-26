@@ -15,7 +15,7 @@ class RholangLexTest : LexerTestCase() {
     }
 
     override fun getDirPath(): String {
-        return Paths.get(RholangTestUtil.getBaseTestDataPath(), "lexer").toString().substring(PathManager.getHomePath().length)
+        return Paths.get(RholangTestUtil.baseTestDataPath, "lexer").toString().substring(PathManager.getHomePath().length)
     }
 
     fun testToken() {

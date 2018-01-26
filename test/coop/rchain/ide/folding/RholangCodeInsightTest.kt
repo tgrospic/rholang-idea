@@ -1,12 +1,12 @@
 package coop.rchain.ide.folding
 
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
+import coop.rchain.RholangTestUtil.baseTestDataPath
 
-import coop.rchain.RholangTestUtil.getBaseTestDataPath
 
 class RholangCodeInsightTest : LightCodeInsightFixtureTestCase() {
     override fun getTestDataPath(): String {
-        return getBaseTestDataPath()
+        return baseTestDataPath
     }
 
     fun testFolding() {

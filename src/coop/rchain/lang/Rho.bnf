@@ -93,7 +93,7 @@ Contract  ::= Proc
 Contract_ ::= CONTRACT ContractName "(" [CPattern] ")" "=" ProcBlock
             | CONTRACT ContractName "=" TypeTerm
 
-ProcBlock ::= "{" Proc "}"
+ProcBlock ::=  "{" [Proc] "}"
 
 ContractName ::= ID_NAME {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
