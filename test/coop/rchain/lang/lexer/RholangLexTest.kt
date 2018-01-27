@@ -10,15 +10,15 @@ import java.nio.file.Paths
 
 class RholangLexTest : LexerTestCase() {
 
-    override fun createLexer(): Lexer {
-        return RhoLexerAdapter()
-    }
+  override fun createLexer(): Lexer {
+    return RhoLexerAdapter()
+  }
 
-    override fun getDirPath(): String {
-        return Paths.get(RholangTestUtil.baseTestDataPath, "lexer").toString().substring(PathManager.getHomePath().length)
-    }
+  override fun getDirPath(): String {
+    return Paths.get(RholangTestUtil.baseTestDataPath, "lexer").toString().substring(PathManager.getHomePath().length)
+  }
 
-    fun testToken() {
-        doFileTest("rho")
-    }
+  fun testToken() {
+    doFileTest("rho")
+  }
 }

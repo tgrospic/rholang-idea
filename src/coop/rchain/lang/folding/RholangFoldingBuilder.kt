@@ -20,48 +20,48 @@ import java.util.ArrayList
 
 class RholangFoldingBuilder : FoldingBuilder, DumbAware {
 
-    override fun buildFoldRegions(node: ASTNode, document: Document): Array<FoldingDescriptor> {
-        val descriptors = ArrayList<FoldingDescriptor>()
-        appendDescriptors(node.psi, descriptors, document)
+  override fun buildFoldRegions(node: ASTNode, document: Document): Array<FoldingDescriptor> {
+    val descriptors = ArrayList<FoldingDescriptor>()
+    appendDescriptors(node.psi, descriptors, document)
 
-        return descriptors.toTypedArray()
+    return descriptors.toTypedArray()
+  }
+
+  private fun appendDescriptors(psi: PsiElement, descriptors: MutableList<FoldingDescriptor>, document: Document) {
+    if (isSingleLine(psi, document)) { // don't fold when  text is single line
+      return
     }
 
-    private fun appendDescriptors(psi: PsiElement, descriptors: MutableList<FoldingDescriptor>, document: Document) {
-        if (isSingleLine(psi, document)) { // don't fold when  text is single line
-            return
-        }
+    val elementType = psi.node.elementType
 
-        val elementType = psi.node.elementType
-
-        if (elementType === RhoTypes.BLOCK_DOC_COMMENT) {
-            val blockDocComment = psi.node
-            val range = TextRange(blockDocComment.textRange.startOffset + 3, blockDocComment.textRange.endOffset - 2)
-            descriptors.add(FoldingDescriptor(blockDocComment, range))
-        } else if (elementType === RhoTypes.PROC_BLOCK) {
-            val textRange = psi.node.textRange
-            val textRange1 = TextRange(textRange.startOffset + 1, textRange.endOffset - 1)
-            descriptors.add(FoldingDescriptor(psi.node, textRange1))
-        }
-
-        var child: PsiElement? = psi.firstChild
-        while (child != null) {
-            appendDescriptors(child, descriptors, document)
-            child = child.nextSibling
-        }
+    if (elementType === RhoTypes.BLOCK_DOC_COMMENT) {
+      val blockDocComment = psi.node
+      val range = TextRange(blockDocComment.textRange.startOffset + 3, blockDocComment.textRange.endOffset - 2)
+      descriptors.add(FoldingDescriptor(blockDocComment, range))
+    } else if (elementType === RhoTypes.PROC_BLOCK) {
+      val textRange = psi.node.textRange
+      val textRange1 = TextRange(textRange.startOffset + 1, textRange.endOffset - 1)
+      descriptors.add(FoldingDescriptor(psi.node, textRange1))
     }
 
-
-    private fun isSingleLine(element: PsiElement, document: Document): Boolean {
-        val textRange = element.textRange
-        return document.getLineNumber(textRange.startOffset) == document.getLineNumber(textRange.endOffset)
+    var child: PsiElement? = psi.firstChild
+    while (child != null) {
+      appendDescriptors(child, descriptors, document)
+      child = child.nextSibling
     }
+  }
 
-    override fun getPlaceholderText(node: ASTNode): String? {
-        return "..."
-    }
 
-    override fun isCollapsedByDefault(node: ASTNode): Boolean {
-        return false
-    }
+  private fun isSingleLine(element: PsiElement, document: Document): Boolean {
+    val textRange = element.textRange
+    return document.getLineNumber(textRange.startOffset) == document.getLineNumber(textRange.endOffset)
+  }
+
+  override fun getPlaceholderText(node: ASTNode): String? {
+    return "..."
+  }
+
+  override fun isCollapsedByDefault(node: ASTNode): Boolean {
+    return false
+  }
 }

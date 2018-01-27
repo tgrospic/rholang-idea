@@ -7,11 +7,11 @@ import java.nio.file.Paths
 
 class RholangParserTest : ParsingTestCase("", "rho", RhoParserDefinition()) {
 
-    override fun getTestDataPath(): String {
-        return Paths.get(RholangTestUtil.baseTestDataPath, "parser").toString()
-    }
+  override fun getTestDataPath(): String {
+    return Paths.get(RholangTestUtil.baseTestDataPath, "parser").toString()
+  }
 
-    fun testtoken() {
-        doTest(true)
-    }
+  fun testtoken() {
+    doTest(true)
+  }
 }
