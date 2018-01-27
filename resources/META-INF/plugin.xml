@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>coop.rchain.lang</id>
   <name>Rholang</name>
-  <version>0.0.3</version>
+  <version>0.0.4</version>
   <vendor email="grospic@gmail.com" url="https://rchain.coop">RChain.coop</vendor>
 
   <description><![CDATA[
