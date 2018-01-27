@@ -12,6 +12,12 @@
 
   <change-notes><![CDATA[
     <ul>
+        <li><b>0.0.4 @AbnerZheng</b>:
+          <ul>
+            <li>Implemented folding feature.</li>
+            <li>Added initial tests.</li>
+          </ul>
+        </li>
         <li><b>0.0.3</b>:
           <ul>
             <li>Syntax: Contracts as processes (recursive).</li>

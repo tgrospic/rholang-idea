@@ -35,16 +35,17 @@ Any feedback, suggestions, bugs, testing, pull-requests, issues are very welcome
 ### Development
 
 - setup [IntelliJ dev-plugin prerequisites][idea-dev-setup]
-- open repo in the editor
+- open repo in the editor and import `rholang-idea.iml`
 - generate Java parser from `Rho.bnf` through the file context menu [Generate Parser Code][idea-gen-parser]
-- generate Java lexer from `Rho.flex` through the file context menu [Run JFlex Generator][idea-gen-lexer]
+- generate Java lexer from `Rho.flex` through the file context menu [Run JFlex Generator][idea-gen-lexer] (choose _out_ or _gen_ folder)
+- build the project (choose _IntelliJ SDK_ and language level _8_)
 - create new Plugin Run configuration with default setup
 - run/debug in a separate editor
+- optionally, to keep formatting consistent install plugin for [EditorConfig][editor-config]
 
 ### Test
 
-Intellij has provide some test frameworks.These framework do simplified verifying work. For more detail you can read [IntelliJ Platform SDK DevGuide
-][idea-test-guide]
+Intellij has provide some test frameworks. These framework do simplified verifying work. For more detail you can read [IntelliJ Platform SDK DevGuide][idea-test-guide].
 
 #### How to use
 
@@ -63,12 +64,30 @@ Then rerun the test case, and you'll find it works.
 
 ### TODO
 
+- write more tests and configure CI
 - write Formatter
 - write [Completion Contributor][idea-completion]
 - write [Reference Contributor][idea-reference]
 - add [plugin actions][idea-plugin-actions]
 - connect with the compiler (get semantic info)
 - ...
+
+## Release Notes
+
+### 0.0.4 [@AbnerZheng](https://github.com/AbnerZheng)
+- Implemented folding feature.
+- Added initial tests.
+
+### 0.0.3
+- Syntax: Contracts as processes (recursive).
+- Syntax: Fix arithmetic operators.
+- New file icon.
+
+### 0.0.2
+- Contributing info, plugin name change.
+
+### 0.0.1
+- Initial release. Syntax highlighting.
 
 ## License
 
@@ -77,7 +96,7 @@ Then rerun the test case, and you'll find it works.
 [releases]: https://github.com/tgrospic/rholang-idea/releases
 [rchain-coop]: https://www.rchain.coop
 [rho-github]: https://github.com/rchain/rchain/tree/master/rholang
-[rho-bnf-origin]: https://github.com/rchain/rchain/blob/e1b77e7b942e8f1bc98d1e5fe7705f51c2e9440d/rholang/src/main/bnfc/rholang.cf
+[rho-bnf-origin]: https://github.com/rchain/rchain/blob/2710ac95a304afd3840f3c77d72ee37e607dbf53/rholang/src/main/bnfc/rholang.cf
 [rho-idea-plugin]: https://plugins.jetbrains.com/plugin/9833-rholang
 [arch-rholang]: http://rchain-architecture.readthedocs.io/en/latest/contracts/contract-design.html#rholang-a-concurrent-language
 [arch-namespace-logic]: http://rchain-architecture.readthedocs.io/en/latest/contracts/namespaces.html#namespace-logic
@@ -92,6 +111,7 @@ Then rerun the test case, and you'll find it works.
 [idea-reference]: https://www.jetbrains.org/intellij/sdk/docs/tutorials/custom_language_support/reference_contributor.html
 [idea-plugin-actions]: https://www.jetbrains.org/intellij/sdk/docs/basics/action_system.html
 [idea-test-guide]: https://www.jetbrains.org/intellij/sdk/docs/tutorials/writing_tests_for_plugins.html
+[editor-config]: http://editorconfig.org
 
-[beta-badge]: https://cdn.rawgit.com/tgrospic/rholang-idea/master/docs/beta-0.0.3.svg
+[beta-badge]: https://cdn.rawgit.com/tgrospic/rholang-idea/master/docs/beta-0.0.4.svg
 [license]: https://github.com/tgrospic/rholang-idea/blob/master/LICENSE
