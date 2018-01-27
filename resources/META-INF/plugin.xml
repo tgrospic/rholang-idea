@@ -38,6 +38,8 @@
     <lang.parserDefinition language="Rholang" implementationClass="coop.rchain.lang.RhoParserDefinition"/>
     <lang.syntaxHighlighterFactory language="Rholang" implementationClass="coop.rchain.lang.RhoSyntaxHighlighterFactory"/>
     <lang.commenter language="Rholang" implementationClass="coop.rchain.lang.RhoCommenter"/>
+    <lang.foldingBuilder language="Rholang" implementationClass="coop.rchain.lang.folding.RholangFoldingBuilder"/>
+
     <colorSettingsPage implementation="coop.rchain.lang.RhoColorSettingsPage"/>
     <annotator language="Rholang" implementationClass="coop.rchain.lang.RhoHighlightingAnnotator"/>
   </extensions>

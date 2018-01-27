@@ -1,5 +1,10 @@
 out/
-.idea/workspace.xml
 gen/
 *.java~
 /*.jar
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/uiDesigner.xml
+.idea/misc.xml
+

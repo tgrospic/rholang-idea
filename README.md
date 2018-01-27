@@ -41,6 +41,21 @@ Any feedback, suggestions, bugs, testing, pull-requests, issues are very welcome
 - create new Plugin Run configuration with default setup
 - run/debug in a separate editor
 
+### Test
+
+Intellij has provide some test frameworks.These framework do simplified verifying work. For more detail you can read [IntelliJ Platform SDK DevGuide
+][idea-test-guide]
+
+#### How to use
+
+Just as using JUnit, there is a 'run' button on the left of the class or test case. You can click this button to run or debug. But there will be error after you run the test case, reporting that can not find the file. Now, you should config the run configuration, and set the vm option as follows:
+
+```
+-ea -Xbootclasspath/p:../out/classes/production/boot -XX:+HeapDumpOnOutOfMemoryError -Xmx512m -XX:MaxPermSize=320m -Didea.system.path=../test-system -Didea.home.path=./ -Didea.config.path=../test-config -Didea.test.group=ALL_EXCLUDE_DEFINED 
+```
+
+Then rerun the test case, and you'll find it works.
+
 ### Deployment
 
 - generate _jar_ file through the project root context menu [Prepare Plugin Module ... For Deployment][idea-deploy]
@@ -76,6 +91,7 @@ Any feedback, suggestions, bugs, testing, pull-requests, issues are very welcome
 [idea-completion]: https://www.jetbrains.org/intellij/sdk/docs/tutorials/custom_language_support/completion_contributor.html
 [idea-reference]: https://www.jetbrains.org/intellij/sdk/docs/tutorials/custom_language_support/reference_contributor.html
 [idea-plugin-actions]: https://www.jetbrains.org/intellij/sdk/docs/basics/action_system.html
+[idea-test-guide]: https://www.jetbrains.org/intellij/sdk/docs/tutorials/writing_tests_for_plugins.html
 
 [beta-badge]: https://cdn.rawgit.com/tgrospic/rholang-idea/master/docs/beta-0.0.3.svg
 [license]: https://github.com/tgrospic/rholang-idea/blob/master/LICENSE
