@@ -94,6 +94,7 @@ Contract_ ::= CONTRACT ContractName "(" [CPattern] ")" "=" ProcBlock
             | CONTRACT ContractName "=" TypeTerm
 
 ProcBlock ::=  "{" [Proc] "}"
+ProcParen ::= "(" [Proc] ")"
 
 ContractName ::= ID_NAME {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
@@ -105,24 +106,30 @@ private numericLit ::= '-'? (BIN_LIT | OCT_LIT | HEX_LIT | DEC_LIT)
 private stringLit ::= STRING_LIT | RAW_STRING_LIT | CHAR_LIT
 private comment ::= (BLOCK_COMMENT|BLOCK_DOC_COMMENT|LINE_COMMENT|LINE_DOC_COMMENT)
 
+CBranchBlock ::= "{" [CBranch] "}"
 // Processes
-Proc4 ::= NIL | Value
-Proc3 ::= ChanRefSymbol Chan ["(" [Proc] ")"]
-Proc2 ::= Chan "!" "(" [Proc] ")"
-Proc1 ::= SUM "(" Bind "/:" Bind ")" ProcBlock
+private Proc4 ::= NIL | Value
+private Proc3 ::= ChanRefSymbol Chan [ProcParen]
+private Proc2 ::= Chan "!" ProcParen
+private Proc1 ::= SUM "(" Bind "/:" Bind ")" ProcBlock
         | TOTAL "(" Bind ":\\" Bind ")" ProcBlock
-        | FOR "(" [Bind] ")" "{" [Proc] "}"
-        | SELECT "{" [CBranch] "}"
-        | MATCH Proc WITH [PMBranch]
+        | FOR BindParen ProcBlock
+        | SELECT CBranchBlock
+        | MatchWith
         | MATCH Proc { [PMBranch] }
         | NEW [VarPattern] IN ProcBlock
         | NEW [VarPattern] IN Proc
         | LET ("(" CPattern ")" | CPattern) "=" Proc IN Proc
-        | ConstrName "(" [Proc] ")"
-        | ID_NAME "(" [Proc] ")"
+        | ConstrName ProcParen
+        | ID_NAME ProcParen
         | Contract_
         | "@" ID_NAME
-Proc_ ::= (FnDef | Proc1 | Proc2 | Proc3 | Proc4 | ConstrName) [TypePattern] | comment
+
+
+MatchWith ::= MATCH Proc WITH [PMBranch]
+
+BindParen ::= "(" [Bind] ")"
+private Proc_ ::= (FnDef | Proc1 | Proc2 | Proc3 | Proc4 | ConstrName) [TypePattern] | comment
 Proc  ::= Proc_ (("|"|","|"."|"!")? Proc_)*
 
 ChanRefSymbol ::= "*"|"#" {
@@ -173,9 +180,9 @@ QVal ::= TRUE
 
 // Quantity
 Quantity_ ::= ("-"|"+") Quantity_
-  | "(" [Proc] ")"
+  | ProcParen
   | "[" [Proc] "]"
-  | "{" [Proc] "}"
+  | ProcBlock
   | "<" [Proc] ">"
   | QVal
 Quantity ::= Quantity_ (("*"|"/"|"+"|"-"|"<="|"<"|">="|">"|"=="|"!="|"&&"|"||") Quantity_)*

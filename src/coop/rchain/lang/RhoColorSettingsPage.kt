@@ -12,7 +12,7 @@ class RhoColorSettingsPage : ColorSettingsPage, InspectionColorSettingsPage, Dis
   private val ANNOTATOR_TAGS = RhoColor.values().associateBy({ it.name }, { it.textAttributesKey })
 
   private val DEMO_TEXT by lazy {
-"""/**
+    """/**
  * Rholang is a behaviorally typed, concurrent programming language,
  * with a focus on message-passing and formally modeled by the ρ-calculus,
  * a reflective, higher-order extension of the π-calculus.

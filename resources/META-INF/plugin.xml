@@ -45,8 +45,10 @@
     <lang.syntaxHighlighterFactory language="Rholang" implementationClass="coop.rchain.lang.RhoSyntaxHighlighterFactory"/>
     <lang.commenter language="Rholang" implementationClass="coop.rchain.lang.RhoCommenter"/>
     <lang.foldingBuilder language="Rholang" implementationClass="coop.rchain.lang.folding.RholangFoldingBuilder"/>
+    <lang.formatter language="Rholang" implementationClass="coop.rchain.lang.formatter.RholangFormattingModelBuilder"/>
 
     <colorSettingsPage implementation="coop.rchain.lang.RhoColorSettingsPage"/>
+    <langCodeStyleSettingsProvider implementation="coop.rchain.lang.formatter.settings.RholangCodeStyleSettingsProvider"/>
     <annotator language="Rholang" implementationClass="coop.rchain.lang.RhoHighlightingAnnotator"/>
   </extensions>
 

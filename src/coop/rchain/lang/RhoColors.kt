@@ -12,7 +12,7 @@ import com.intellij.openapi.editor.HighlighterColors
 enum class RhoColor(humanName: String, default: TextAttributesKey) {
   CONTRACT("Contract declaration", com.intellij.openapi.editor.DefaultLanguageHighlighterColors.FUNCTION_DECLARATION),
   FUNCTION("Function declaration", com.intellij.openapi.editor.DefaultLanguageHighlighterColors.FUNCTION_DECLARATION),
-//  FUNCTION_CALL("Function call", Default.FUNCTION_CALL),
+  //  FUNCTION_CALL("Function call", Default.FUNCTION_CALL),
   CONSTRUCTOR("Constructor", com.intellij.openapi.editor.DefaultLanguageHighlighterColors.FUNCTION_CALL),
   TYPE_PARAMETER("Type parameter", JavaHighlightingColors.TYPE_PARAMETER_NAME_ATTRIBUTES),
   BIND_PARAMETER("Bind parameter", JavaHighlightingColors.LOCAL_VARIABLE_ATTRIBUTES),

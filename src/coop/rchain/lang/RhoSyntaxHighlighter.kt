@@ -49,7 +49,7 @@ class RhoSyntaxHighlighter : SyntaxHighlighterBase() {
       SEMICOLON -> RhoColor.SEMICOLON
       COMMA -> RhoColor.COMMA
 
-      // Operators
+    // Operators
       HASH, DOLLAR, AT -> RhoColor.OPERATORS
       TRIPLE_DOT -> RhoColor.OPERATORS
       DOUBLE_DOT -> RhoColor.OPERATORS
