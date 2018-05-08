@@ -18,7 +18,7 @@ With all this sweet superpowers, that comes with the Rholang compiler and type c
 
 ## Configure custom colors on the settings page
 
-Only colors for _Constructor_ and _Bind parameter_ have no default values.
+Maybe you want to set color for _Bind parameter_ which has no default value.
 
 ![Idea settings page](./docs/settings-page.png)
 
@@ -35,9 +35,8 @@ Any feedback, suggestions, bugs, testing, pull-requests, issues are very welcome
 ### Development
 
 - setup [IntelliJ dev-plugin prerequisites][idea-dev-setup]
-- open repo in the editor and import `rholang-idea.iml`
 - generate Java parser from `Rho.bnf` through the file context menu [Generate Parser Code][idea-gen-parser]
-- generate Java lexer from `Rho.flex` through the file context menu [Run JFlex Generator][idea-gen-lexer] (choose _out_ or _gen_ folder)
+- generate Java lexer from `Rho.flex` through the file context menu [Run JFlex Generator][idea-gen-lexer] (choose _out_ folder or any folder outside the project where jflex.jar will be downloaded)
 - build the project (choose _IntelliJ SDK_ and language level _8_)
 - create new Plugin Run configuration with default setup
 - run/debug in a separate editor
@@ -45,17 +44,11 @@ Any feedback, suggestions, bugs, testing, pull-requests, issues are very welcome
 
 ### Test
 
-Intellij has provide some test frameworks. These framework do simplified verifying work. For more detail you can read [IntelliJ Platform SDK DevGuide][idea-test-guide].
+IntelliJ has provided testing framework. This framework simplifies verification. For more details, you can read [IntelliJ Platform SDK DevGuide][idea-test-guide].
 
 #### How to use
 
-Just as using JUnit, there is a 'run' button on the left of the class or test case. You can click this button to run or debug. But there will be error after you run the test case, reporting that can not find the file. Now, you should config the run configuration, and set the vm option as follows:
-
-```
--ea -Xbootclasspath/p:../out/classes/production/boot -XX:+HeapDumpOnOutOfMemoryError -Xmx512m -XX:MaxPermSize=320m -Didea.system.path=../test-system -Didea.home.path=./ -Didea.config.path=../test-config -Didea.test.group=ALL_EXCLUDE_DEFINED 
-```
-
-Then rerun the test case, and you'll find it works.
+Just as using JUnit, there is a 'run' button on the left of the class or test case. You can click this button to run or debug. Also, _right-click_ on the `test` folder has option to _Run/Debug 'All Tests'_.
 
 ### Deployment
 
@@ -65,7 +58,6 @@ Then rerun the test case, and you'll find it works.
 ### TODO
 
 - write more tests and configure CI
-- write Formatter
 - write [Completion Contributor][idea-completion]
 - write [Reference Contributor][idea-reference]
 - add [plugin actions][idea-plugin-actions]
@@ -73,6 +65,10 @@ Then rerun the test case, and you'll find it works.
 - ...
 
 ## Release Notes
+
+### 0.1.0 [@AbnerZheng](https://github.com/AbnerZheng)
+- Implemented formatting feature.
+- Updated grammar [@tgrospic](https://github.com/tgrospic).
 
 ### 0.0.4 [@AbnerZheng](https://github.com/AbnerZheng)
 - Implemented folding feature.
@@ -96,7 +92,7 @@ Then rerun the test case, and you'll find it works.
 [releases]: https://github.com/tgrospic/rholang-idea/releases
 [rchain-coop]: https://www.rchain.coop
 [rho-github]: https://github.com/rchain/rchain/tree/master/rholang
-[rho-bnf-origin]: https://github.com/rchain/rchain/blob/2710ac95a304afd3840f3c77d72ee37e607dbf53/rholang/src/main/bnfc/rholang.cf
+[rho-bnf-origin]: https://github.com/rchain/rchain/blob/1f5450e8e54b2bbce7d81206eb8d4fdd6bc96797/rholang/src/main/bnfc/rholang.cf
 [rho-idea-plugin]: https://plugins.jetbrains.com/plugin/9833-rholang
 [arch-rholang]: http://rchain-architecture.readthedocs.io/en/latest/contracts/contract-design.html#rholang-a-concurrent-language
 [arch-namespace-logic]: http://rchain-architecture.readthedocs.io/en/latest/contracts/namespaces.html#namespace-logic
@@ -113,5 +109,5 @@ Then rerun the test case, and you'll find it works.
 [idea-test-guide]: https://www.jetbrains.org/intellij/sdk/docs/tutorials/writing_tests_for_plugins.html
 [editor-config]: http://editorconfig.org
 
-[beta-badge]: https://cdn.rawgit.com/tgrospic/rholang-idea/master/docs/beta-0.0.4.svg
+[beta-badge]: https://cdn.rawgit.com/tgrospic/rholang-idea/master/docs/beta-0.1.0.svg
 [license]: https://github.com/tgrospic/rholang-idea/blob/master/LICENSE

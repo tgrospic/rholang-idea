@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>coop.rchain.lang</id>
   <name>Rholang</name>
-  <version>0.0.4</version>
+  <version>0.1.0</version>
   <vendor email="grospic@gmail.com" url="https://rchain.coop">RChain.coop</vendor>
 
   <description><![CDATA[
@@ -12,21 +12,27 @@
 
   <change-notes><![CDATA[
     <ul>
-        <li><b>0.0.4 @AbnerZheng</b>:
-          <ul>
-            <li>Implemented folding feature.</li>
-            <li>Added initial tests.</li>
-          </ul>
-        </li>
-        <li><b>0.0.3</b>:
-          <ul>
-            <li>Syntax: Contracts as processes (recursive).</li>
-            <li>Syntax: Fix arithmetic operators.</li>
-            <li>New file icon.</li>
-          </ul>
-        </li>
-        <li><b>0.0.2</b>: Update plugin name.</li>
-        <li><b>0.0.1</b>: Syntax highlighting and comments support. Initial version.</li>
+      <li><b>0.1.0 @AbnerZheng</b>:
+        <ul>
+          <li>Implemented formatting feature.</li>
+          <li>Updated grammar @tgrospic</li>
+        </ul>
+      </li>
+      <li><b>0.0.4 @AbnerZheng</b>:
+        <ul>
+          <li>Implemented folding feature.</li>
+          <li>Added initial tests.</li>
+        </ul>
+      </li>
+      <li><b>0.0.3</b>:
+        <ul>
+          <li>Syntax: Contracts as processes (recursive).</li>
+          <li>Syntax: Fix arithmetic operators.</li>
+          <li>New file icon.</li>
+        </ul>
+      </li>
+      <li><b>0.0.2</b>: Update plugin name.</li>
+      <li><b>0.0.1</b>: Syntax highlighting and comments support. Initial version.</li>
     </ul>
     ]]>
   </change-notes>

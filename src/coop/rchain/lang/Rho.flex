@@ -92,8 +92,7 @@ HEX_LIT = "0x" [a-fA-F0-9_]+ {INT_SUFFIX}?
  	{HEX_LIT}                        { yybegin(YYINITIAL); return RhoTypes.HEX_LIT; }
  	[0-9] [0-9_]* "." /[^\.0-9e]     { yybegin(YYINITIAL); return RhoTypes.DEC_LIT; }
  	{DEC_LIT}                        { yybegin(YYINITIAL); return RhoTypes.DEC_LIT; }
-  [a-zA-Z_] [a-zA-Z_0-9'-]*        { yybegin(YYINITIAL); return RhoTypes.ID_NAME; }
-//  [a-z] [a-zA-Z0-9_']*             { yybegin(YYINITIAL); return RhoTypes.ID_VAR; }
+  [a-zA-Z_] [a-zA-Z_0-9'-]*        { yybegin(YYINITIAL); return RhoTypes.VAR; }
 
   "..."                            { yybegin(YYINITIAL); return RhoTypes.TRIPLE_DOT; }
   ".."                             { yybegin(YYINITIAL); return RhoTypes.DOUBLE_DOT; }

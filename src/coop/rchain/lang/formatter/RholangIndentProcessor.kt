@@ -41,7 +41,13 @@ class RholangIndentProcessor(private val settings: CommonCodeStyleSettings) {
       } else Indent.getNormalIndent()
     }
 
-    return if (grandParentType === RhoTypes.QUANTITY_ && parentType === RhoTypes.PROC) {
+    if (parentType === RhoTypes.PROC_BRACKET) {
+      return if (elementType === RhoTypes.OPEN_SQUARE_BRACKET || elementType === RhoTypes.CLOSE_SQUARE_BRACKET) {
+        Indent.getNoneIndent()
+      } else Indent.getContinuationIndent()
+    }
+
+    return if (grandParentType === RhoTypes.QUANTITY && parentType === RhoTypes.PROC) {
       Indent.getContinuationIndent()
     } else Indent.getNoneIndent()
 

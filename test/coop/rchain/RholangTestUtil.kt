@@ -1,8 +1,9 @@
 package coop.rchain
 
-import com.intellij.openapi.application.PathManager
+import java.io.File
 
 object RholangTestUtil {
+  val testDataPath = File("testData").absolutePath
   val baseTestDataPath: String
-    get() = PathManager.getHomePath() + "/testData"
+    get() = testDataPath
 }

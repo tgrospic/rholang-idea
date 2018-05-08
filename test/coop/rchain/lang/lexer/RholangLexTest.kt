@@ -1,7 +1,6 @@
 package coop.rchain.lang.lexer
 
 import com.intellij.lexer.Lexer
-import com.intellij.openapi.application.PathManager
 import com.intellij.testFramework.LexerTestCase
 import coop.rchain.RholangTestUtil
 import coop.rchain.lang.RhoLexerAdapter
@@ -14,9 +13,11 @@ class RholangLexTest : LexerTestCase() {
     return RhoLexerAdapter()
   }
 
-  override fun getDirPath(): String {
-    return Paths.get(RholangTestUtil.baseTestDataPath, "lexer").toString().substring(PathManager.getHomePath().length)
-  }
+  override fun getDirPath(): String =
+    Paths.get(RholangTestUtil.baseTestDataPath, "lexer").toString()
+
+  override fun getPathToTestDataFile(extension: String): String =
+    this.getDirPath() + "/" + this.getTestName(true) + extension
 
   fun testToken() {
     doFileTest("rho")

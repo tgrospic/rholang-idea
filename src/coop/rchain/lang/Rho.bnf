@@ -76,9 +76,8 @@
     SEMICOLON = ";"
     UNDERSCORE = "_"
 
-    // Names and variables
-    ID_NAME = 'regexp: [a-zA-Z_][a-zA-Z_0-9]*'
-//    ID_VAR = 'regexp: [a-z_][a-zA-Z_0-9]*'
+    // Variables
+    VAR = 'regexp: [a-zA-Z_][a-zA-Z_0-9]*'
   ]
 
 //  psiImplUtilClass="coop.rchain.psi.impl.RhoPsiImplUtil"
@@ -87,77 +86,60 @@
 //  extends(".*Quantity")=Quantity
 }
 
-// Top level contract declaration
+// Top level process declaration
+RootProc ::= Proc
 
-Contract  ::= Proc
-Contract_ ::= CONTRACT ContractName "(" [CPattern] ")" "=" ProcBlock
-            | CONTRACT ContractName "=" TypeTerm
-
-ProcBlock ::=  "{" [Proc] "}"
-ProcParen ::= "(" [Proc] ")"
-
-ContractName ::= ID_NAME {
-  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
-  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
-}
-
-// Primitive types
-private numericLit ::= '-'? (BIN_LIT | OCT_LIT | HEX_LIT | DEC_LIT)
-private stringLit ::= STRING_LIT | RAW_STRING_LIT | CHAR_LIT
-private comment ::= (BLOCK_COMMENT|BLOCK_DOC_COMMENT|LINE_COMMENT|LINE_DOC_COMMENT)
-
-CBranchBlock ::= "{" [CBranch] "}"
 // Processes
 private Proc4 ::= NIL | Value
 private Proc3 ::= ChanRefSymbol Chan [ProcParen]
 private Proc2 ::= Chan "!" ProcParen
-private Proc1 ::= SUM "(" Bind "/:" Bind ")" ProcBlock
-        | TOTAL "(" Bind ":\\" Bind ")" ProcBlock
-        | FOR BindParen ProcBlock
-        | SELECT CBranchBlock
-        | MatchWith
-        | MATCH Proc { [PMBranch] }
-        | NEW [VarPattern] IN ProcBlock
-        | NEW [VarPattern] IN Proc
-        | LET ("(" CPattern ")" | CPattern) "=" Proc IN Proc
-        | ConstrName ProcParen
-        | ID_NAME ProcParen
-        | Contract_
-        | "@" ID_NAME
+private Proc1 ::= FOR BindParen ProcBlock
+                | CONTRACT ContractName "(" [CPattern] ")" "=" ProcBlock
+                | CONTRACT ContractName "=" TypeTerm // experimental
+                | SELECT CBranchBlock
+                | MatchWith
+                | NEW [VarPattern] IN ProcBlock
+                | NEW [VarPattern] IN Proc
+                | LET ("(" CPattern ")" | CPattern) "=" Proc IN Proc
+                | ConstrName ProcParen
+                | VAR ProcParen
+                | "@" VAR
 
+private
+Proc_ ::= (Proc1 | Proc2 | Proc3 | Proc4 | ConstrName) [TypePattern] | comment
+Proc  ::= Proc_ (("|" | "," | "." | "!")? Proc_)*
 
-MatchWith ::= MATCH Proc WITH [PMBranch]
+ProcBlock    ::= "{" [Proc] "}"
+ProcParen    ::= "(" [Proc] ")"
+ProcBracket  ::= "[" [Proc] "]"
 
-BindParen ::= "(" [Bind] ")"
-private Proc_ ::= (FnDef | Proc1 | Proc2 | Proc3 | Proc4 | ConstrName) [TypePattern] | comment
-Proc  ::= Proc_ (("|"|","|"."|"!")? Proc_)*
+CBranchBlock ::= "{" [CBranch] "}"
+BindParen    ::= "(" [Bind] ")"
+MatchWith    ::= MATCH Proc WITH [PMBranch]
 
-ChanRefSymbol ::= "*"|"#" {
+ChanRefSymbol ::= "*" {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
 
-// Experimental!
-FnDef ::= DEF FnName "(" [CPattern] ")" "=" ProcBlock
-        | DEF FnName "=" TypeTerm
-
-FnName ::= ID_NAME {
+ContractName ::= VAR {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
 
-ConstrName ::= ID_NAME {
+ConstrName ::= VAR {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
 
 // Channels
-Chan ::= "@" Proc3 | ID_NAME {
+Chan ::= "@" Proc3 | VAR {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
 
 // Variable binding
+private
 Bind_ ::= CPattern "<-" Chan IF Proc
         | CPattern "<-" Chan
         | ValPattern
@@ -165,25 +147,27 @@ Bind_ ::= CPattern "<-" Chan IF Proc
 Bind  ::= Bind_ (";" Bind_)*
 
 // Pattern match branches
+private
 PMBranch_ ::= PPattern "=>" ProcBlock
 PMBranch  ::= PMBranch_ PMBranch_*
 
 // Choice branch
-CBranch  ::= CBranch_ CBranch_*
+private
 CBranch_ ::= CASE [Bind] "=>" ProcBlock
+CBranch  ::= CBranch_ CBranch_*
 
 QVal ::= TRUE
        | FALSE
        | numericLit
        | stringLit
-       | ID_NAME ["." Proc]
+       | VAR ["." Proc]
 
 // Quantity
+private
 Quantity_ ::= ("-"|"+") Quantity_
   | ProcParen
-  | "[" [Proc] "]"
+  | ProcBracket
   | ProcBlock
-  | "<" [Proc] ">"
   | QVal
 Quantity ::= Quantity_ (("*"|"/"|"+"|"-"|"<="|"<"|">="|">"|"=="|"!="|"&&"|"||") Quantity_)*
 
@@ -191,55 +175,55 @@ Quantity ::= Quantity_ (("*"|"/"|"+"|"-"|"<="|"<"|">="|">"|"=="|"!="|"&&"|"||") 
 Value ::= Quantity
 
 // Variable patterns
+private
+VarPattern_ ::= (VAR | "_") [TypePattern]
 VarPattern  ::= VarPattern_ ("," VarPattern_)*
-VarPattern_ ::= (ID_NAME | "_") [TypePattern]
 
 // Process patterns
-PPattern4 ::= NIL | CPattern
-PPattern3 ::= "*" CPattern | "#" CPattern
-PPattern2 ::= CPattern "!" "(" [PPattern] ")" ;
-PPattern1 ::= FOR "(" [PatternBind] ")" "{" PPattern "}"
-            | MATCH PPattern WITH [PatternPatternMatch]
-            | NEW [VarPattern] IN PPattern1
-            | LET "(" CPattern ")" "=" PPattern IN PPattern1
-            | ConstrName "(" [PPattern] ")"
-PPattern_ ::= PPattern1 | PPattern2 | PPattern3 | PPattern4
-PPattern  ::= PPattern_ ("|" PPattern1)*
+private
+PPattern_ ::= VarPattern | ValPattern
+PPattern  ::= PPattern_ ("," PPattern_)*
 
-TypeTerm ::= (ID_NAME) [TypeGeneric] {
+// Channel patterns
+CPattern_ ::= VarPattern
+            | ValPattern {
+  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+}
+CPattern  ::= CPattern_ ("," CPattern_)*
+
+// Bind pattern
+private
+PatternBind_ ::= CPattern "<-" CPattern
+PatternBind  ::= PatternBind_ (";" PatternBind_)*
+
+// Pattern match branch pattern
+private
+PatternPatternMatch_ ::= PPattern "=>" "{" PPattern "}"
+PatternPatternMatch  ::= PatternPatternMatch_ PatternPatternMatch_*
+
+// Value patterns
+private
+ValPattern_ ::= "[" [PPattern] "]"
+              | TRUE
+              | FALSE
+              | numericLit
+              | stringLit
+ValPattern  ::= ValPattern_ ("," ValPattern_)*
+
+// Primitive types
+private numericLit ::= '-'? (BIN_LIT | OCT_LIT | HEX_LIT | DEC_LIT)
+private stringLit  ::= STRING_LIT | RAW_STRING_LIT | CHAR_LIT
+private comment    ::= (BLOCK_COMMENT|BLOCK_DOC_COMMENT|LINE_COMMENT|LINE_DOC_COMMENT)
+
+// Type patterns (experimental)
+TypeTerm ::= (VAR) [TypeGeneric] {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
 TypeGeneric ::= "<" [TypeTerm] ">"
               | "[" [TypeTerm] "]"
               | "(" [TypeTerm_] ")"
-TypeTerm_ ::= TypeTerm ("," TypeTerm)*
+private
+TypeTerm_   ::= TypeTerm ("," TypeTerm)*
 TypePattern ::= ":" TypeTerm
-
-// Channel patterns
-CPattern_ ::= VarPattern
-            | ValPattern
-            | "@" PPattern3
-            | "(" VarPattern ")"
-            | ID_NAME {
-  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
-  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
-}
-CPattern  ::= CPattern_ ("," CPattern_ )*
-
-// Bind pattern
-PatternBind_ ::= CPattern "<-" CPattern
-PatternBind  ::= PatternBind_ (";" PatternBind_)*
-
-// Pattern match branch pattern
-PatternPatternMatch_ ::= PPattern "=>" "{" PPattern "}"
-PatternPatternMatch  ::= PatternPatternMatch_ PatternPatternMatch_*
-
-// Value patterns
-ValPattern_ ::= ID_NAME "{" [PPattern] "}"
-             | "<" [PPattern] ">"
-             | TRUE
-             | FALSE
-             | DEC_LIT
-             | STRING_LIT
-ValPattern  ::= ValPattern_ ("," ValPattern_)*

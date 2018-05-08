@@ -30,8 +30,7 @@ class RhoSyntaxHighlighter : SyntaxHighlighterBase() {
       SUM, IF, IN, WITH, DEF,
       UNDERSCORE -> RhoColor.KEYWORD
 
-      ID_NAME -> RhoColor.IDENTIFIER
-//      ID_VAR -> RhoColor.IDENTIFIER
+      VAR -> RhoColor.IDENTIFIER
 
       CHAR_LIT, STRING_LIT, RAW_STRING_LIT -> RhoColor.STRING
       DEC_LIT, OCT_LIT, HEX_LIT, BIN_LIT -> RhoColor.NUMBER

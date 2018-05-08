@@ -2,13 +2,13 @@
 
 Any suggestions, bugs, testing, pull-requests, issues are very welcome.
 
-## Development
+## Development setup
 
-More info on [README#install](./README.md#install) page section.
+More info on [README##development](./README.md##development) page section.
 
 ## TODO
 
-- write Formatter
+- write more tests and configure CI
 - write [Completion Contributor][idea-completion]
 - write [Reference Contributor][idea-reference]
 - add [plugin actions][idea-plugin-actions]

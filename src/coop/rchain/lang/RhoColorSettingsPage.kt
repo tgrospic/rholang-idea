@@ -18,7 +18,7 @@ class RhoColorSettingsPage : ColorSettingsPage, InspectionColorSettingsPage, Dis
  * a reflective, higher-order extension of the π-calculus.
 */
 new helloworld in {
-  contract <CONTRACT>helloworld</CONTRACT>( <BIND_PARAMETER>world</BIND_PARAMETER> ) = {
+  contract <FUNCTION>helloworld</FUNCTION>( <BIND_PARAMETER>world</BIND_PARAMETER> ) = {
       for( <BIND_PARAMETER>msg</BIND_PARAMETER> <- <PARAMETER>world</PARAMETER> ) {
           // Hello from Rholang!
           <CONSTRUCTOR>print</CONSTRUCTOR>( msg )
