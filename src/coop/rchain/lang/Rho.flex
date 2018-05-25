@@ -62,8 +62,6 @@ HEX_LIT = "0x" [a-fA-F0-9_]+ {INT_SUFFIX}?
   "select"                         { yybegin(YYINITIAL); return RhoTypes.SELECT; }
   "match"                          { yybegin(YYINITIAL); return RhoTypes.MATCH; }
   "total"                          { yybegin(YYINITIAL); return RhoTypes.TOTAL; }
-  "case"                           { yybegin(YYINITIAL); return RhoTypes.CASE; }
-  "with"                           { yybegin(YYINITIAL); return RhoTypes.WITH; }
   "def"                            { yybegin(YYINITIAL); return RhoTypes.DEF; }
   "for"                            { yybegin(YYINITIAL); return RhoTypes.FOR; }
   "let"                            { yybegin(YYINITIAL); return RhoTypes.LET; }

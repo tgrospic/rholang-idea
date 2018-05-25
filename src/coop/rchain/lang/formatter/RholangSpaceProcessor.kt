@@ -34,9 +34,6 @@ class RholangSpaceProcessor(private val myNode: ASTNode, private val mySettings:
       return Spacing.createSpacing(1, 1, 1, false, 0)
     }
 
-    if (type1 === RhoTypes.WITH) {
-      return Spacing.createSpacing(1, 1, 1, false, 0)
-    }
     if (type1 === RhoTypes.PROC && type2 === RhoTypes.CLOSE_SQUARE_BRACKET) {
       if (this.myNode.textContains('\n')) {
         val prevLeafSkipWhiteSpacesAndComments = PsiTreeHelpUtil.getPrevLeafSkipWhiteSpacesAndComments(myNode)

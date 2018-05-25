@@ -17,8 +17,6 @@
     SELECT = "select"
     MATCH = "match"
     TOTAL = "total"
-    CASE = "case"
-    WITH = "with"
     DEF = "def"
     FOR = "for"
     LET = "let"

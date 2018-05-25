@@ -25,7 +25,7 @@ match [
 balance_of_sender >= amount,
 amount > 0,
 balance_of_receiver + amount > balance_of_receiver
-] with
+] {
 [true, true, true] => {
 balances_channel!(
 (balances
@@ -37,6 +37,7 @@ rtn!(true)
 _ => {
 balances_channel!(balances) |
 rtn!(false)
+}
 }
 }
 }
@@ -59,7 +60,7 @@ balance_of_sender >= amount,
 sender_allowed >= amount,
 amount > 0,
 balance_of_receiver + amount > balance_of_receiver
-] with
+] {
 [true, true, true, true] => {
 balances_channel!(
 (balances
@@ -75,6 +76,7 @@ _ => {
 balances_channel!(balances) |
 allowed_channel!(allowed) |
 rtn!(false)
+}
 }
 }
 }
