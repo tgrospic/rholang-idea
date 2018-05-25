@@ -52,7 +52,7 @@ Just as using JUnit, there is a 'run' button on the left of the class or test ca
 
 ### Deployment
 
-- generate _jar_ file through the project root context menu [Prepare Plugin Module ... For Deployment][idea-deploy]
+- generate _jar_ file through the project root context menu [Prepare Plugin Module ... For Deployment][idea-deploy] (in `.idea` folder)
 - upload _jar_ to [JetBrains Plugins Repository][rho-idea-plugin] 
 
 ### TODO
@@ -68,7 +68,7 @@ Just as using JUnit, there is a 'run' button on the left of the class or test ca
 
 ### 0.1.0 [@AbnerZheng](https://github.com/AbnerZheng)
 - Implemented formatting feature.
-- Updated grammar [@tgrospic](https://github.com/tgrospic).
+- Updated grammar (quick fix before Mercury) [@tgrospic](https://github.com/tgrospic).
 
 ### 0.0.4 [@AbnerZheng](https://github.com/AbnerZheng)
 - Implemented folding feature.

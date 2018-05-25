@@ -102,7 +102,7 @@ private Proc1 ::= FOR BindParen ProcBlock
                 | NEW [VarPattern] IN Proc
                 | LET ("(" CPattern ")" | CPattern) "=" Proc IN Proc
                 | ConstrName ProcParen
-                | VAR ProcParen
+                | AtVar ProcParen
                 | "@" VAR
 
 private
@@ -115,33 +115,38 @@ ProcBracket  ::= "[" [Proc] "]"
 
 CBranchBlock ::= "{" [CBranch] "}"
 BindParen    ::= "(" [Bind] ")"
-MatchWith    ::= MATCH Proc WITH [PMBranch]
+MatchWith    ::= MATCH Proc "{" [PMBranch] "}"
 
 ChanRefSymbol ::= "*" {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
 
-ContractName ::= VAR {
+ContractName ::= AtVar {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
 
-ConstrName ::= VAR {
+ConstrName ::= AtVar {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
 
 // Channels
-Chan ::= "@" Proc3 | VAR {
+Chan ::= "@" Proc3 | AtVar {
   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
 
+private
+AtVar ::= ["@"] VAR
+        | ["@"] stringLit
+        | ["@"] "{" Proc "}"
+
 // Variable binding
 private
-Bind_ ::= CPattern "<-" Chan IF Proc
-        | CPattern "<-" Chan
+Bind_ ::= CPattern ("<-"|"<=") Chan IF Proc
+        | CPattern ("<-"|"<=") Chan
         | ValPattern
         | VarPattern
 Bind  ::= Bind_ (";" Bind_)*
@@ -153,7 +158,7 @@ PMBranch  ::= PMBranch_ PMBranch_*
 
 // Choice branch
 private
-CBranch_ ::= CASE [Bind] "=>" ProcBlock
+CBranch_ ::= [Bind] "=>" ProcBlock
 CBranch  ::= CBranch_ CBranch_*
 
 QVal ::= TRUE
@@ -176,7 +181,7 @@ Value ::= Quantity
 
 // Variable patterns
 private
-VarPattern_ ::= (VAR | "_") [TypePattern]
+VarPattern_ ::= ["@"] (VAR | "_") [TypePattern]
 VarPattern  ::= VarPattern_ ("," VarPattern_)*
 
 // Process patterns
@@ -204,12 +209,14 @@ PatternPatternMatch  ::= PatternPatternMatch_ PatternPatternMatch_*
 
 // Value patterns
 private
-ValPattern_ ::= "[" [PPattern] "]"
+ValPattern1 ::= "[" [PPattern] "]"
               | TRUE
               | FALSE
               | numericLit
               | stringLit
-ValPattern  ::= ValPattern_ ("," ValPattern_)*
+private
+ValPattern2 ::= ["@"] ValPattern1
+ValPattern  ::= ValPattern2 ("," ValPattern2)*
 
 // Primitive types
 private numericLit ::= '-'? (BIN_LIT | OCT_LIT | HEX_LIT | DEC_LIT)
