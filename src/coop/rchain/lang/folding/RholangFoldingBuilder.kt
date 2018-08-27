@@ -34,11 +34,7 @@ class RholangFoldingBuilder : FoldingBuilder, DumbAware {
 
     val elementType = psi.node.elementType
 
-    if (elementType === RhoTypes.BLOCK_DOC_COMMENT) {
-      val blockDocComment = psi.node
-      val range = TextRange(blockDocComment.textRange.startOffset + 3, blockDocComment.textRange.endOffset - 2)
-      descriptors.add(FoldingDescriptor(blockDocComment, range))
-    } else if (elementType === RhoTypes.PROC_BLOCK) {
+    if (elementType === RhoTypes.PROC_BLOCK) {
       val textRange = psi.node.textRange
       val textRange1 = TextRange(textRange.startOffset + 1, textRange.endOffset - 1)
       descriptors.add(FoldingDescriptor(psi.node, textRange1))

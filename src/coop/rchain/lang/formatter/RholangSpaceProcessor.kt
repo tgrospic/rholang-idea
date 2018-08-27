@@ -27,14 +27,14 @@ class RholangSpaceProcessor(private val myNode: ASTNode, private val mySettings:
     val node2 = child2.node
     val type2 = node2.elementType
 
-    if (type1 === RhoTypes.OPEN_BRACE && type2 === RhoTypes.PROC) {
+    if (type1 === RhoTypes.OPEN_BRACE && type2 === RhoTypes.PROC_) {
       return Spacing.createSpacing(1, 1, 1, false, 0)
     }
     if (type1 === RhoTypes.BITWISE_OR) {
       return Spacing.createSpacing(1, 1, 1, false, 0)
     }
 
-    if (type1 === RhoTypes.PROC && type2 === RhoTypes.CLOSE_SQUARE_BRACKET) {
+    if (type1 === RhoTypes.PROC_ && type2 === RhoTypes.CLOSE_SQUARE_BRACKET) {
       if (this.myNode.textContains('\n')) {
         val prevLeafSkipWhiteSpacesAndComments = PsiTreeHelpUtil.getPrevLeafSkipWhiteSpacesAndComments(myNode)
         if (prevLeafSkipWhiteSpacesAndComments?.node?.elementType === RhoTypes.MATCH) {

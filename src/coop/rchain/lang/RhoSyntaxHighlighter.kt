@@ -32,14 +32,12 @@ class RhoSyntaxHighlighter : SyntaxHighlighterBase() {
 
       VAR -> RhoColor.IDENTIFIER
 
-      CHAR_LIT, STRING_LIT, RAW_STRING_LIT -> RhoColor.STRING
-      DEC_LIT, OCT_LIT, HEX_LIT, BIN_LIT -> RhoColor.NUMBER
+      STRINGLIT -> RhoColor.STRING
+      INTEGER  -> RhoColor.NUMBER
 
 
-      LINE_COMMENT -> RhoColor.LINE_COMMENT
+      COMMENT -> RhoColor.LINE_COMMENT
       BLOCK_COMMENT -> RhoColor.BLOCK_COMMENT
-      LINE_DOC_COMMENT,
-      BLOCK_DOC_COMMENT -> RhoColor.DOC_COMMENT
 
       OPEN_PAREN, CLOSE_PAREN -> RhoColor.PARENTHESIS
       OPEN_BRACE, CLOSE_BRACE -> RhoColor.BRACES

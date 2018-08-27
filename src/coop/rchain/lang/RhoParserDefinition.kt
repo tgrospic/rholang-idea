@@ -58,7 +58,7 @@ class RhoParserDefinition : ParserDefinition {
 
   companion object {
     val WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE)
-    val COMMENTS = TokenSet.create(RhoTypes.LINE_COMMENT)
+    val COMMENTS = TokenSet.create(RhoTypes.COMMENT)
     val FILE = IFileElementType(RhoLanguage.Companion.INSTANCE)
   }
 }

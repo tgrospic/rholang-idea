@@ -29,6 +29,8 @@ private fun colorFor(element: RhoCompositeElement): RhoColor? = when (element) {
   is RhoConstrName -> RhoColor.CONSTRUCTOR
   is RhoChan -> RhoColor.PARAMETER
   is RhoTypeTerm -> RhoColor.TYPE_PARAMETER
+  is RhoName -> RhoColor.BIND_PARAMETER
+  is RhoFnName -> RhoColor.FUNCTION
   is RhoCPattern_ -> RhoColor.BIND_PARAMETER
   is RhoChanRefSymbol -> RhoColor.KEYWORD
   else -> null
