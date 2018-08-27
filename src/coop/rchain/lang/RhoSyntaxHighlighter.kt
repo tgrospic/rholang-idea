@@ -36,7 +36,7 @@ class RhoSyntaxHighlighter : SyntaxHighlighterBase() {
       INTEGER  -> RhoColor.NUMBER
 
 
-      COMMENT -> RhoColor.LINE_COMMENT
+      LINE_COMMENT -> RhoColor.LINE_COMMENT
       BLOCK_COMMENT -> RhoColor.BLOCK_COMMENT
 
       OPEN_PAREN, CLOSE_PAREN -> RhoColor.PARENTHESIS

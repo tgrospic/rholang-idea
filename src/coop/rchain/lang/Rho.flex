@@ -6,17 +6,16 @@ import com.intellij.psi.tree.IElementType;
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static coop.rchain.lang.psi.RhoTypes.*;
-
 %%
 
 %{
-  public _RhoLexer() {
+  public RhoLexer() {
     this((java.io.Reader)null);
   }
 %}
 
 %public
-%class _RhoLexer
+%class RhoLexer
 %implements FlexLexer
 %function advance
 %type IElementType
@@ -26,10 +25,10 @@ EOL=\R
 WHITE_SPACE=\s+
 
 SPACE=[ \t\n\x0B\f\r]+
-COMMENT="//".*
+LINE_COMMENT = "//".*
 INTEGER=[0-9]+(\.[0-9]*)?
 ID_NAME=([a-zA-Z'][a-zA-Z_0-9']*)|([_a-zA-Z0-9']+)
-STRING=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
+StringLit=('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")
 URI=`([^`\\]|\\[`\\])*`
 
 %%
@@ -40,8 +39,6 @@ URI=`([^`\\]|\\[`\\])*`
   "select"           { return SELECT; }
   "match"            { return MATCH; }
   "total"            { return TOTAL; }
-  "case"             { return CASE; }
-  "with"             { return WITH; }
   "def"              { return DEF; }
   "for"              { return FOR; }
   "let"              { return LET; }
@@ -91,18 +88,12 @@ URI=`([^`\\]|\\[`\\])*`
   ","                { return COMMA; }
   ";"                { return SEMICOLON; }
   "_"                { return UNDERSCORE; }
-  "BIN_LIT"          { return BIN_LIT; }
-  "OCT_LIT"          { return OCT_LIT; }
-  "HEX_LIT"          { return HEX_LIT; }
-  "DEC_LIT"          { return DEC_LIT; }
-  "BLOCK_COMMENT"    { return BLOCK_COMMENT; }
-  "LINE_COMMENT"     { return LINE_COMMENT; }
 
   {SPACE}            { return SPACE; }
-  {COMMENT}          { return COMMENT; }
+  {LINE_COMMENT}          { return LINE_COMMENT; }
   {INTEGER}          { return INTEGER; }
   {ID_NAME}          { return ID_NAME; }
-  {STRING}           { return STRING; }
+  {StringLit}           { return STRINGLIT; }
   {URI}              { return URI; }
 
 }

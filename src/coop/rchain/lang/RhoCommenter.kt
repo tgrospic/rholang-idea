@@ -26,7 +26,7 @@ class RhoCommenter : Commenter {
   }
 
   val lineCommentTokenType: IElementType?
-    get() = RhoTypes.COMMENT
+    get() = RhoTypes.LINE_COMMENT
 
   val blockCommentTokenType: IElementType?
     get() = RhoTypes.BLOCK_COMMENT

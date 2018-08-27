@@ -76,7 +76,7 @@
 
 
     space='regexp:\s+'
-    comment='regexp://.*'
+    line_comment='regexp://.*'
     block_comment="regexp:/\*(.|\n)*\*/"
 
     Integer='regexp:\d+(\.\d*)?'
@@ -93,52 +93,53 @@
 //  extends(".*Quantity")=Quantity
 }
 
-Proc ::= [Proc_ (COMMA Proc_)*]
-Proc_ ::= Proc1 Proc__
-Proc__ ::= ["|" Proc1 Proc__]
+RootProc ::= Proc
+private Proc ::= Proc_ (COMMA Proc_)*
+private Proc_ ::= Proc1 Proc__
+private Proc__ ::= ["|" Proc1 Proc__]
 
-Proc16 ::= Ground | Collection | ProcVar | "Nil" | SimpleType | ProcBlock
-Proc15 ::= "~" Proc15 | Proc16
-Proc14 ::= Proc15 Proc14_
+private Proc16 ::= Ground | Collection | ProcVar | "Nil" | SimpleType | ProcBlock
+private Proc15 ::= "~" Proc15 | Proc16
+private Proc14 ::= Proc15 Proc14_
 private Proc14_ ::= ["/\\" Proc15 Proc14_]
-Proc13 ::= Proc14 Proc13_
+private Proc13 ::= Proc14 Proc13_
 private Proc13_ ::= ["\\/" Proc14 Proc13_ | VarRefKind Var Proc13_]
-Proc12 ::= "*" Name | Proc13
-Proc11 ::= Proc12 Proc11_ | OPEN_PAREN Proc4 CLOSE_PAREN Proc11_
-private Proc11_ ::= [DOT Var ProcParenOption Proc11_]
+private Proc12 ::= "*" RhoName | Proc13
+private Proc11 ::= Proc12 Proc11_ | OPEN_PAREN Proc4 CLOSE_PAREN Proc11_
+private private Proc11_ ::= [DOT Var ProcParenOption Proc11_]
 
-Proc10 ::= NOT Proc10 | "-" Proc10 | Proc11
+private Proc10 ::= NOT Proc10 | "-" Proc10 | Proc11
 
-Proc9 ::= Proc10 Proc9_
+private Proc9 ::= Proc10 Proc9_
 private Proc9_ ::= [("*" | "/" | "%%") Proc10 Proc9_]
 
-Proc8 ::= Proc9 Proc8_
+private Proc8 ::= Proc9 Proc8_
 private Proc8_ ::= [("+" | "-" | "++" | "--") Proc9 Proc8_]
 
-Proc7 ::= Proc8 Proc7_
+private Proc7 ::= Proc8 Proc7_
 private Proc7_ ::= [("<" | "<=" | ">" | ">=" | "matches") Proc8 Proc7_]
 
-Proc6 ::= Proc7 Proc6_
+private Proc6 ::= Proc7 Proc6_
 private Proc6_ ::= [("==" | "!=") Proc7 Proc6_]
 
-Proc5 ::= Proc6 Proc5_
+private Proc5 ::= Proc6 Proc5_
 private Proc5_ ::= ["and" Proc6 Proc5_]
 
-Proc4 ::= Proc5 Proc4_
+private Proc4 ::= Proc5 Proc4_
 private Proc4_ ::= ["or" Proc5 Proc4_]
-Proc3 ::= Name Send ProcParenOption | Proc4
-Proc2 ::= PContr | PInput | PChoice | PMatch | PBundle | Proc3
-Proc1 ::= PIf | PIfElse | PNew | Proc2
+Proc3 ::= RhoName Send ProcParenOption | Proc4
+private Proc2 ::= PContr | PInput | PChoice | PMatch | PBundle | Proc3
+private Proc1 ::= PIf | PIfElse | PNew | Proc2
 
-private PContr ::= CONTRACT Name OPEN_PAREN Name? NameRemainder CLOSE_PAREN ASSIGN OPEN_BRACE Proc CLOSE_BRACE
-private PInput ::= FOR OPEN_PAREN Receipt CLOSE_PAREN OPEN_BRACE Proc CLOSE_BRACE
-private PChoice ::= SELECT OPEN_BRACE Branch? CLOSE_BRACE
-private PBundle ::= Bundle OPEN_BRACE Proc CLOSE_BRACE
-private PMatch ::=  MATCH Proc4 OPEN_BRACE [Case] CLOSE_BRACE
+PContr ::= CONTRACT RhoName OPEN_PAREN RhoName? NameRemainder CLOSE_PAREN ASSIGN OPEN_BRACE Proc CLOSE_BRACE
+PInput ::= FOR OPEN_PAREN Receipt CLOSE_PAREN OPEN_BRACE Proc CLOSE_BRACE
+PChoice ::= SELECT OPEN_BRACE Branch? CLOSE_BRACE
+PBundle ::= Bundle OPEN_BRACE Proc CLOSE_BRACE
+PMatch ::=  MATCH Proc4 OPEN_BRACE [Case] CLOSE_BRACE
 
-private PIf ::= IF OPEN_PAREN Proc CLOSE_PAREN Proc2
-private PIfElse ::= IF OPEN_PAREN Proc CLOSE_PAREN Proc2 "ELSE" Proc1
-private PNew ::= NEW NameDecl? IN Proc1
+PIf ::= IF OPEN_PAREN Proc CLOSE_PAREN Proc2
+PIfElse ::= IF OPEN_PAREN Proc CLOSE_PAREN Proc2 "ELSE" Proc1
+PNew ::= NEW NameDecl? IN Proc1
 
 
 ProcBlock       ::=  "{" Proc "}"
@@ -152,7 +153,7 @@ Var ::= ID_NAME
 
 // Names
 Name_ ::= "_" | Var | AT Proc12;
-Name ::= Name_ ("," Name_)*
+RhoName ::= Name_ ("," Name_)*
 
 // Bundle
 Bundle ::= "bundle+" | "bundle-" | "bundle0" | "bundle"
@@ -162,7 +163,7 @@ Receipt ::= ReceiptLinearImpl
 
 ReceiptLinearImpl ::= [LinearBind]
 
-private LinearBind_ ::= [Name] NameRemainder ("<-"|"<=") Name
+private LinearBind_ ::= [RhoName] NameRemainder ("<-"|"<=") RhoName
 
 LinearBind ::= LinearBind_ (";" LinearBind_)*
 
