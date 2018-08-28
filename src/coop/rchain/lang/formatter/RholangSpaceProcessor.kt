@@ -32,7 +32,7 @@ class RholangSpaceProcessor(private val myNode: ASTNode, private val mySettings:
         return Spacing.createSpacing(1, 1, 1, false, 0)
       }
     }
-    if (type1 === RhoTypes.BITWISE_OR && myNode.treeParent.treeParent.elementType !== RhoTypes.NAME_) {
+    if (type1 === RhoTypes.BITWISE_OR && myNode.treeParent?.treeParent?.elementType !== RhoTypes.NAME_) {
       return Spacing.createSpacing(1, 1, 1, false, 0)
     }
 
