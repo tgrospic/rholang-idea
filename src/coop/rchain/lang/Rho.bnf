@@ -14,15 +14,12 @@
 
   tokens = [
     CONTRACT = "contract"
-    SELECT = "select"
     MATCH = "match"
-    TOTAL = "total"
-    DEF = "def"
     FOR = "for"
-    LET = "let"
     NEW = "new"
-    SUM = "sum"
+    SELECT = "select"
     IF = "if"
+    ELSE = "else"
     IN = "in"
     FALSE = "false"
     TRUE = "true"
@@ -94,7 +91,7 @@
 }
 
 RootProc ::= Proc
-private Proc ::= Proc_ (COMMA Proc_)*
+Proc ::= Proc_ (COMMA Proc_)*
 private Proc_ ::= Proc1 Proc__
 private Proc__ ::= ["|" Proc1 Proc__]
 
@@ -129,21 +126,23 @@ private Proc4 ::= Proc5 Proc4_
 private Proc4_ ::= ["or" Proc5 Proc4_]
 Proc3 ::= RhoName Send ProcParenOption | Proc4
 private Proc2 ::= PContr | PInput | PChoice | PMatch | PBundle | Proc3
-private Proc1 ::= PIf | PIfElse | PNew | Proc2
+private Proc1 ::= PIfElse | PIf | PNew | Proc2
 
-PContr ::= CONTRACT RhoName OPEN_PAREN RhoName? NameRemainder CLOSE_PAREN ASSIGN OPEN_BRACE Proc CLOSE_BRACE
-PInput ::= FOR OPEN_PAREN Receipt CLOSE_PAREN OPEN_BRACE Proc CLOSE_BRACE
+PContr ::= CONTRACT RhoName OPEN_PAREN RhoName? NameRemainder CLOSE_PAREN ASSIGN ProcBlock
+PInput ::= FOR OPEN_PAREN Receipt CLOSE_PAREN ProcBlock
 PChoice ::= SELECT OPEN_BRACE Branch? CLOSE_BRACE
-PBundle ::= Bundle OPEN_BRACE Proc CLOSE_BRACE
-PMatch ::=  MATCH Proc4 OPEN_BRACE [Case] CLOSE_BRACE
+PBundle ::= Bundle ProcBlock
+PMatch ::=  MATCH Proc4 CaseBlock
 
+CaseBlock ::= OPEN_BRACE [Case] CLOSE_BRACE
+
+PIfElse ::= IF OPEN_PAREN Proc CLOSE_PAREN Proc2 ELSE Proc1
 PIf ::= IF OPEN_PAREN Proc CLOSE_PAREN Proc2
-PIfElse ::= IF OPEN_PAREN Proc CLOSE_PAREN Proc2 "ELSE" Proc1
 PNew ::= NEW NameDecl? IN Proc1
 
 
-ProcBlock       ::=  "{" Proc "}"
-ProcBlockOption ::=  "{" [Proc] "}"
+ProcBlock       ::=  OPEN_BRACE Proc CLOSE_BRACE
+ProcBlockOption ::=  OPEN_BRACE [Proc] CLOSE_BRACE
 ProcParenOption ::= "(" [Proc] ")"
 
 // Process variables
@@ -151,8 +150,17 @@ ProcVar ::= "_" | Var
 
 Var ::= ID_NAME
 
+// This is needed for differ from Name and ProcessVar
+NameVar ::= Var {
+   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+}
+
 // Names
-Name_ ::= "_" | Var | AT Proc12;
+Name_ ::= "_" | NameVar | AT Proc12 {
+   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+}
 RhoName ::= Name_ ("," Name_)*
 
 // Bundle
@@ -175,13 +183,13 @@ private Branch_ ::= ReceiptLinearImpl "=>" Proc3
 Branch ::= Branch_+
 
 // Match Cases
-private Case_ ::= Proc13 "=>" Proc3
+Case_ ::= Proc13 "=>" Proc3
 Case ::= Case_+
 
 // Name Declarations
 // Eventually will have IOPairs.
 NameDecl ::= NameDecl_ ("," NameDecl_)*
-private NameDecl_ ::= Var OPEN_PAREN URI CLOSE_PAREN | Var
+NameDecl_ ::= NameVar OPEN_PAREN URI CLOSE_PAREN | NameVar
 
 // Booleans:
 Bool ::= TRUE | FALSE
@@ -194,8 +202,10 @@ private CollectList ::= OPEN_SQUARE_BRACKET [Proc] ProcRemainder CLOSE_SQUARE_BR
 private CollectTuple ::= Tuple
 private CollectSet ::= "Set" "(" [Proc] ")"
 private CollectMap ::= "{" [KeyValuePair] "}"
-private KeyValuePair_ ::= Proc COLON Proc
-private KeyValuePair ::= KeyValuePair_ (comma KeyValuePair_)*
+
+// important: we use Proc_ here, because if we use Proc, they will all consume COMMA
+private KeyValuePair_ ::= Proc COLON Proc_
+KeyValuePair ::= KeyValuePair_ (COMMA KeyValuePair_)*
 private Tuple ::= OPEN_PAREN Proc ",)" | OPEN_PAREN Proc COMMA [Proc] CLOSE_PAREN
 
 

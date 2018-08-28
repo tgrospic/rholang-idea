@@ -21,30 +21,27 @@ class RholangSpaceProcessor(private val myNode: ASTNode, private val mySettings:
     }
 
     val elementType = myNode.elementType
-    val iElementType = if (myNode.treeParent == null) null else myNode.treeParent.elementType
+    val parentType = if (myNode.treeParent == null) null else myNode.treeParent.elementType
     val node1 = child1.node
     val type1 = node1.elementType
     val node2 = child2.node
     val type2 = node2.elementType
 
-//    if (type1 === RhoTypes.OPEN_BRACE && type2 === RhoTypes.PROC_) {
-//      return Spacing.createSpacing(1, 1, 1, false, 0)
-//    }
-    if (type1 === RhoTypes.BITWISE_OR) {
+    if (type1 === RhoTypes.OPEN_BRACE && (type2 === RhoTypes.PROC || type2 === RhoTypes.CASE)) {
+      if(parentType !== RhoTypes.NAME_) {
+        return Spacing.createSpacing(1, 1, 1, false, 0)
+      }
+    }
+    if (type1 === RhoTypes.BITWISE_OR && myNode.treeParent.treeParent.elementType !== RhoTypes.NAME_) {
       return Spacing.createSpacing(1, 1, 1, false, 0)
     }
 
-    if (type1 === RhoTypes.PROC_3 && type2 === RhoTypes.CLOSE_SQUARE_BRACKET) {
-      if (this.myNode.textContains('\n')) {
-        val prevLeafSkipWhiteSpacesAndComments = PsiTreeHelpUtil.getPrevLeafSkipWhiteSpacesAndComments(myNode)
-        if (prevLeafSkipWhiteSpacesAndComments?.node?.elementType === RhoTypes.MATCH) {
-          return Spacing.createSpacing(1, 1, 1, false, 0)
-        }
-      }
+    if(type1 === RhoTypes.CASE_ || type2 === RhoTypes.CASE_){
+      return Spacing.createSpacing(1, 1, 1, false, 0)
     }
 
-    if (type2 === RhoTypes.SEMICOLON) {
-      return Spacing.createSpacing(0, 0, 0, true, mySettings.KEEP_BLANK_LINES_IN_CODE)
+    if(type2 === RhoTypes.CLOSE_BRACE && parentType === RhoTypes.NAME_){
+      return null
     }
 
     return if (type2 === RhoTypes.CLOSE_BRACE) {

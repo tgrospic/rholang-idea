@@ -17,7 +17,7 @@ class RholangCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
   override fun getDefaultCommonSettings(): CommonCodeStyleSettings? {
     val defaultSettings = CommonCodeStyleSettings(language)
     val indentOptions = defaultSettings.initIndentOptions()
-    indentOptions.INDENT_SIZE = 4
+    indentOptions.INDENT_SIZE = 2
     indentOptions.CONTINUATION_INDENT_SIZE = 2
     return defaultSettings
   }

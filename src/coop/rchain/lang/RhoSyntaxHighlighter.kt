@@ -26,14 +26,16 @@ class RhoSyntaxHighlighter : SyntaxHighlighterBase() {
   companion object {
     fun map(tokenType: IElementType?): RhoColor? = when (tokenType) {
       TRUE, FALSE,
-      CONTRACT, SELECT, MATCH, TOTAL, FOR, LET, NIL, NEW,
-      SUM, IF, IN, DEF,
+      CONTRACT, MATCH, FOR, NIL, NEW, SELECT,
+      IF, IN, ELSE,
       UNDERSCORE -> RhoColor.KEYWORD
 
       VAR -> RhoColor.IDENTIFIER
 
       STRINGLIT -> RhoColor.STRING
+      URI      -> RhoColor.NUMBER
       INTEGER  -> RhoColor.NUMBER
+      RHO_NAME -> RhoColor.RHO_NAME
 
 
       LINE_COMMENT -> RhoColor.LINE_COMMENT

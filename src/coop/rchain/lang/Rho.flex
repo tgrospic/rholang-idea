@@ -38,13 +38,10 @@ URI=`([^`\\]|\\[`\\])*`
   "contract"         { return CONTRACT; }
   "select"           { return SELECT; }
   "match"            { return MATCH; }
-  "total"            { return TOTAL; }
-  "def"              { return DEF; }
   "for"              { return FOR; }
-  "let"              { return LET; }
   "new"              { return NEW; }
-  "sum"              { return SUM; }
   "if"               { return IF; }
+  "else"             { return ELSE; }
   "in"               { return IN; }
   "false"            { return FALSE; }
   "true"             { return TRUE; }

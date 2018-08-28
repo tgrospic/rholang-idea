@@ -29,13 +29,13 @@ class RholangIndentProcessor(private val settings: CommonCodeStyleSettings) {
 //      return Indent.getNormalIndent()
 //    }
 
-    if (parentType === RhoTypes.PROC_PAREN_OPTION) {
+    if (parentType === RhoTypes.PROC_PAREN_OPTION ) {
       return if (elementType === RhoTypes.OPEN_PAREN || elementType === RhoTypes.CLOSE_PAREN) {
         Indent.getNoneIndent()
       } else Indent.getContinuationIndent()
     }
 
-    if (parentType === RhoTypes.PROC_BLOCK) {
+    if (parentType === RhoTypes.PROC_BLOCK || parentType === RhoTypes.PROC_BLOCK || parentType === RhoTypes.CASE_BLOCK ) {
       return if (elementType === RhoTypes.OPEN_BRACE || elementType === RhoTypes.CLOSE_BRACE) {
         Indent.getNoneIndent()
       } else Indent.getNormalIndent()
@@ -44,7 +44,7 @@ class RholangIndentProcessor(private val settings: CommonCodeStyleSettings) {
 //    return if (grandParentType === RhoTypes.QUANTITY_ && parentType === RhoTypes.PROC) {
 //      Indent.getContinuationIndent()
 //    } else Indent.getNoneIndent()
-    return Indent.getContinuationIndent()
+    return Indent.getNoneIndent()
 
   }
 
