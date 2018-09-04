@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>coop.rchain.lang</id>
   <name>Rholang</name>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
   <vendor email="grospic@gmail.com" url="https://rchain.coop">RChain.coop</vendor>
 
   <description><![CDATA[
@@ -12,6 +12,11 @@
 
   <change-notes><![CDATA[
     <ul>
+      <li><b>0.2.0 @AbnerZheng</b>:
+        <ul>
+          <li>Updated grammar for Rholang Mercury release.</li>
+        </ul>
+      </li>
       <li><b>0.1.0 @AbnerZheng</b>:
         <ul>
           <li>Implemented formatting feature.</li>

@@ -66,6 +66,9 @@ Just as using JUnit, there is a 'run' button on the left of the class or test ca
 
 ## Release Notes
 
+### 0.2.0 [@AbnerZheng](https://github.com/AbnerZheng)
+- Updated grammar for Rholang Mercury release.
+
 ### 0.1.0 [@AbnerZheng](https://github.com/AbnerZheng)
 - Implemented formatting feature.
 - Updated grammar (quick fix before Mercury) [@tgrospic](https://github.com/tgrospic).
