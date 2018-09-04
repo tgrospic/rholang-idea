@@ -1,2 +1,0 @@
-// A simple Hello World contract
-new helloworld in {contract helloworld( world ) = {for( msg <- world ) {print(msg)}} |new world in {helloworld!(world) |world!("Hello World")}}

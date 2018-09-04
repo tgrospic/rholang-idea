@@ -14,15 +14,12 @@
 
   tokens = [
     CONTRACT = "contract"
-    SELECT = "select"
     MATCH = "match"
-    TOTAL = "total"
-    DEF = "def"
     FOR = "for"
-    LET = "let"
     NEW = "new"
-    SUM = "sum"
+    SELECT = "select"
     IF = "if"
+    ELSE = "else"
     IN = "in"
     FALSE = "false"
     TRUE = "true"
@@ -74,8 +71,17 @@
     SEMICOLON = ";"
     UNDERSCORE = "_"
 
-    // Variables
-    VAR = 'regexp: [a-zA-Z_][a-zA-Z_0-9]*'
+
+    space='regexp:\s+'
+    line_comment='regexp://.*'
+    block_comment="regexp:/\*(.|\n)*\*/"
+
+    Integer='regexp:\d+(\.\d*)?'
+    ID_NAME="regexp:([a-zA-Z'][a-zA-Z_0-9']*)|([_a-zA-Z0-9']+)"
+    StringLit="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+
+    // todo-abner url regexp
+    URI = "regexp:`([^`\\]|\\[`\\])*`"
   ]
 
 //  psiImplUtilClass="coop.rchain.psi.impl.RhoPsiImplUtil"
@@ -84,151 +90,135 @@
 //  extends(".*Quantity")=Quantity
 }
 
-// Top level process declaration
 RootProc ::= Proc
+Proc ::= Proc_ (COMMA Proc_)*
+private Proc_ ::= Proc1 Proc__
+private Proc__ ::= ["|" Proc1 Proc__]
 
-// Processes
-private Proc4 ::= NIL | Value
-private Proc3 ::= ChanRefSymbol Chan [ProcParen]
-private Proc2 ::= Chan "!" ProcParen
-private Proc1 ::= FOR BindParen ProcBlock
-                | CONTRACT ContractName "(" [CPattern] ")" "=" ProcBlock
-                | CONTRACT ContractName "=" TypeTerm // experimental
-                | SELECT CBranchBlock
-                | MatchWith
-                | NEW [VarPattern] IN ProcBlock
-                | NEW [VarPattern] IN Proc
-                | LET ("(" CPattern ")" | CPattern) "=" Proc IN Proc
-                | ConstrName ProcParen
-                | AtVar ProcParen
-                | "@" VAR
+private Proc16 ::= Ground | Collection | ProcVar | "Nil" | SimpleType | ProcBlock
+private Proc15 ::= "~" Proc15 | Proc16
+private Proc14 ::= Proc15 Proc14_
+private Proc14_ ::= ["/\\" Proc15 Proc14_]
+private Proc13 ::= Proc14 Proc13_
+private Proc13_ ::= ["\\/" Proc14 Proc13_ | VarRefKind Var Proc13_]
+private Proc12 ::= "*" RhoName | Proc13
+private Proc11 ::= Proc12 Proc11_ | OPEN_PAREN Proc4 CLOSE_PAREN Proc11_
+private private Proc11_ ::= [DOT Var ProcParenOption Proc11_]
 
-private
-Proc_ ::= (Proc1 | Proc2 | Proc3 | Proc4 | ConstrName) [TypePattern] | comment
-Proc  ::= Proc_ (("|" | "," | "." | "!")? Proc_)*
+private Proc10 ::= NOT Proc10 | "-" Proc10 | Proc11
 
-ProcBlock    ::= "{" [Proc] "}"
-ProcParen    ::= "(" [Proc] ")"
-ProcBracket  ::= "[" [Proc] "]"
+private Proc9 ::= Proc10 Proc9_
+private Proc9_ ::= [("*" | "/" | "%%") Proc10 Proc9_]
 
-CBranchBlock ::= "{" [CBranch] "}"
-BindParen    ::= "(" [Bind] ")"
-MatchWith    ::= MATCH Proc "{" [PMBranch] "}"
+private Proc8 ::= Proc9 Proc8_
+private Proc8_ ::= [("+" | "-" | "++" | "--") Proc9 Proc8_]
 
-ChanRefSymbol ::= "*" {
-  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
-  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+private Proc7 ::= Proc8 Proc7_
+private Proc7_ ::= [("<" | "<=" | ">" | ">=" | "matches") Proc8 Proc7_]
+
+private Proc6 ::= Proc7 Proc6_
+private Proc6_ ::= [("==" | "!=") Proc7 Proc6_]
+
+private Proc5 ::= Proc6 Proc5_
+private Proc5_ ::= ["and" Proc6 Proc5_]
+
+private Proc4 ::= Proc5 Proc4_
+private Proc4_ ::= ["or" Proc5 Proc4_]
+Proc3 ::= RhoName Send ProcParenOption | Proc4
+private Proc2 ::= PContr | PInput | PChoice | PMatch | PBundle | Proc3
+private Proc1 ::= PIfElse | PIf | PNew | Proc2
+
+PContr ::= CONTRACT RhoName OPEN_PAREN RhoName? NameRemainder CLOSE_PAREN ASSIGN ProcBlock
+PInput ::= FOR OPEN_PAREN Receipt CLOSE_PAREN ProcBlock
+PChoice ::= SELECT OPEN_BRACE Branch? CLOSE_BRACE
+PBundle ::= Bundle ProcBlock
+PMatch ::=  MATCH Proc4 CaseBlock
+
+CaseBlock ::= OPEN_BRACE [Case] CLOSE_BRACE
+
+PIfElse ::= IF OPEN_PAREN Proc CLOSE_PAREN Proc2 ELSE Proc1
+PIf ::= IF OPEN_PAREN Proc CLOSE_PAREN Proc2
+PNew ::= NEW NameDecl? IN Proc1
+
+
+ProcBlock       ::=  OPEN_BRACE Proc CLOSE_BRACE
+ProcBlockOption ::=  OPEN_BRACE [Proc] CLOSE_BRACE
+ProcParenOption ::= "(" [Proc] ")"
+
+// Process variables
+ProcVar ::= "_" | Var
+
+Var ::= ID_NAME
+
+// This is needed for differ from Name and ProcessVar
+NameVar ::= Var {
+   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
 
-ContractName ::= AtVar {
-  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
-  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
+// Names
+Name_ ::= "_" | NameVar | AT Proc12 {
+   implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
+   mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
 }
+RhoName ::= Name_ ("," Name_)*
 
-ConstrName ::= AtVar {
-  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
-  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
-}
+// Bundle
+Bundle ::= "bundle+" | "bundle-" | "bundle0" | "bundle"
 
-// Channels
-Chan ::= "@" Proc3 | AtVar {
-  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
-  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
-}
+// Receipt
+Receipt ::= ReceiptLinearImpl
 
-private
-AtVar ::= ["@"] VAR
-        | ["@"] stringLit
-        | ["@"] "{" Proc "}"
+ReceiptLinearImpl ::= [LinearBind]
 
-// Variable binding
-private
-Bind_ ::= CPattern ("<-"|"<=") Chan IF Proc
-        | CPattern ("<-"|"<=") Chan
-        | ValPattern
-        | VarPattern
-Bind  ::= Bind_ (";" Bind_)*
+private LinearBind_ ::= [RhoName] NameRemainder ("<-"|"<=") RhoName
 
-// Pattern match branches
-private
-PMBranch_ ::= PPattern "=>" ProcBlock
-PMBranch  ::= PMBranch_ PMBranch_*
+LinearBind ::= LinearBind_ (";" LinearBind_)*
 
-// Choice branch
-private
-CBranch_ ::= [Bind] "=>" ProcBlock
-CBranch  ::= CBranch_ CBranch_*
+// Types of Send
+Send ::= "!" || "!!"
 
-QVal ::= TRUE
-       | FALSE
-       | numericLit
-       | stringLit
-       | VAR ["." Proc]
+// select branches
+private Branch_ ::= ReceiptLinearImpl "=>" Proc3
+Branch ::= Branch_+
 
-// Quantity
-private
-Quantity_ ::= ("-"|"+") Quantity_
-  | ProcParen
-  | ProcBracket
-  | ProcBlock
-  | QVal
-Quantity ::= Quantity_ (("*"|"/"|"+"|"-"|"<="|"<"|">="|">"|"=="|"!="|"&&"|"||") Quantity_)*
+// Match Cases
+Case_ ::= Proc13 "=>" Proc3
+Case ::= Case_+
 
-// Values
-Value ::= Quantity
+// Name Declarations
+// Eventually will have IOPairs.
+NameDecl ::= NameDecl_ ("," NameDecl_)*
+NameDecl_ ::= NameVar OPEN_PAREN URI CLOSE_PAREN | NameVar
 
-// Variable patterns
-private
-VarPattern_ ::= ["@"] (VAR | "_") [TypePattern]
-VarPattern  ::= VarPattern_ ("," VarPattern_)*
+// Booleans:
+Bool ::= TRUE | FALSE
 
-// Process patterns
-private
-PPattern_ ::= VarPattern | ValPattern
-PPattern  ::= PPattern_ ("," PPattern_)*
+// Ground
+Ground ::= Bool | Integer | StringLit | URI
 
-// Channel patterns
-CPattern_ ::= VarPattern
-            | ValPattern {
-  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
-  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
-}
-CPattern  ::= CPattern_ ("," CPattern_)*
+// Collections:
+private CollectList ::= OPEN_SQUARE_BRACKET [Proc] ProcRemainder CLOSE_SQUARE_BRACKET
+private CollectTuple ::= Tuple
+private CollectSet ::= "Set" "(" [Proc] ")"
+private CollectMap ::= "{" [KeyValuePair] "}"
 
-// Bind pattern
-private
-PatternBind_ ::= CPattern "<-" CPattern
-PatternBind  ::= PatternBind_ (";" PatternBind_)*
+// important: we use Proc_ here, because if we use Proc, they will all consume COMMA
+private KeyValuePair_ ::= Proc COLON Proc_
+KeyValuePair ::= KeyValuePair_ (COMMA KeyValuePair_)*
+private Tuple ::= OPEN_PAREN Proc ",)" | OPEN_PAREN Proc COMMA [Proc] CLOSE_PAREN
 
-// Pattern match branch pattern
-private
-PatternPatternMatch_ ::= PPattern "=>" "{" PPattern "}"
-PatternPatternMatch  ::= PatternPatternMatch_ PatternPatternMatch_*
 
-// Value patterns
-private
-ValPattern1 ::= "[" [PPattern] "]"
-              | TRUE
-              | FALSE
-              | numericLit
-              | stringLit
-private
-ValPattern2 ::= ["@"] ValPattern1
-ValPattern  ::= ValPattern2 ("," ValPattern2)*
 
-// Primitive types
-private numericLit ::= '-'? (BIN_LIT | OCT_LIT | HEX_LIT | DEC_LIT)
-private stringLit  ::= STRING_LIT | RAW_STRING_LIT | CHAR_LIT
-private comment    ::= (BLOCK_COMMENT|BLOCK_DOC_COMMENT|LINE_COMMENT|LINE_DOC_COMMENT)
+Collection ::= CollectList | CollectTuple | CollectMap | CollectSet
 
-// Type patterns (experimental)
-TypeTerm ::= (VAR) [TypeGeneric] {
-  implements = [ "coop.rchain.lang.psi.RhoNamedElement" ]
-  mixin = "coop.rchain.lang.psi.RhoNamedElementImpl"
-}
-TypeGeneric ::= "<" [TypeTerm] ">"
-              | "[" [TypeTerm] "]"
-              | "(" [TypeTerm_] ")"
-private
-TypeTerm_   ::= TypeTerm ("," TypeTerm)*
-TypePattern ::= ":" TypeTerm
+
+// Remainders:
+ProcRemainder ::= (TRIPLE_DOT Var)?
+
+NameRemainder ::= (TRIPLE_DOT AT Var)?
+
+
+VarRefKind ::= "=" | "=" "*"
+
+SimpleType ::= "Bool" | "Int" | "String" | "Url" | "ByteArray"

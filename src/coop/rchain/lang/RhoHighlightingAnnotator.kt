@@ -25,12 +25,14 @@ class RhoHighlightingAnnotator : Annotator {
 }
 
 private fun colorFor(element: RhoCompositeElement): RhoColor? = when (element) {
-  is RhoContractName -> RhoColor.FUNCTION
-  is RhoConstrName -> RhoColor.CONSTRUCTOR
-  is RhoChan -> RhoColor.PARAMETER
-  is RhoTypeTerm -> RhoColor.TYPE_PARAMETER
-  is RhoCPattern_ -> RhoColor.BIND_PARAMETER
-  is RhoChanRefSymbol -> RhoColor.KEYWORD
+//  is RhoContractName -> RhoColor.FUNCTION
+//  is RhoConstrName -> RhoColor.CONSTRUCTOR
+//  is RhoChan -> RhoColor.PARAMETER
+//  is RhoTypeTerm -> RhoColor.TYPE_PARAMETER
+  is RhoNameVar-> RhoColor.RHO_NAME
+//  is RhoFnName -> RhoColor.FUNCTION
+//  is RhoCPattern_ -> RhoColor.BIND_PARAMETER
+//  is RhoChanRefSymbol -> RhoColor.KEYWORD
   else -> null
 }
 

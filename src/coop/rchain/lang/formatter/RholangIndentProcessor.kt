@@ -21,35 +21,30 @@ class RholangIndentProcessor(private val settings: CommonCodeStyleSettings) {
       return Indent.getNoneIndent()
     }
 
-    if (grandParentType === RhoTypes.BIND_PAREN) {
-      return Indent.getContinuationIndent()
-    }
+//    if (grandParentType === RhoTypes.BIND_PAREN) {
+//      return Indent.getContinuationIndent()
+//    }
 
-    if (elementType === RhoTypes.PM_BRANCH) {
-      return Indent.getNormalIndent()
-    }
+//    if (elementType === RhoTypes.PM_BRANCH) {
+//      return Indent.getNormalIndent()
+//    }
 
-    if (parentType === RhoTypes.PROC_PAREN) {
+    if (parentType === RhoTypes.PROC_PAREN_OPTION ) {
       return if (elementType === RhoTypes.OPEN_PAREN || elementType === RhoTypes.CLOSE_PAREN) {
         Indent.getNoneIndent()
       } else Indent.getContinuationIndent()
     }
 
-    if (parentType === RhoTypes.PROC_BLOCK) {
+    if (parentType === RhoTypes.PROC_BLOCK || parentType === RhoTypes.PROC_BLOCK || parentType === RhoTypes.CASE_BLOCK ) {
       return if (elementType === RhoTypes.OPEN_BRACE || elementType === RhoTypes.CLOSE_BRACE) {
         Indent.getNoneIndent()
       } else Indent.getNormalIndent()
     }
 
-    if (parentType === RhoTypes.PROC_BRACKET) {
-      return if (elementType === RhoTypes.OPEN_SQUARE_BRACKET || elementType === RhoTypes.CLOSE_SQUARE_BRACKET) {
-        Indent.getNoneIndent()
-      } else Indent.getContinuationIndent()
-    }
-
-    return if (grandParentType === RhoTypes.QUANTITY && parentType === RhoTypes.PROC) {
-      Indent.getContinuationIndent()
-    } else Indent.getNoneIndent()
+//    return if (grandParentType === RhoTypes.QUANTITY_ && parentType === RhoTypes.PROC) {
+//      Indent.getContinuationIndent()
+//    } else Indent.getNoneIndent()
+    return Indent.getNoneIndent()
 
   }
 

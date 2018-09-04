@@ -1,22 +1,14 @@
 package coop.rchain.lang.folding
 
 import com.intellij.lang.ASTNode
-import com.intellij.lang.folding.CustomFoldingBuilder
 import com.intellij.lang.folding.FoldingBuilder
 import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import com.intellij.psi.javadoc.PsiDocComment
-import com.intellij.psi.tree.IElementType
-import com.intellij.psi.util.PsiTreeUtil
-import coop.rchain.lang.psi.RhoFile
-import coop.rchain.lang.psi.RhoProc
 import coop.rchain.lang.psi.RhoTypes
-import coop.rchain.lang.psi.impl.RhoProcBlockImpl
-
-import java.util.ArrayList
+import java.util.*
 
 class RholangFoldingBuilder : FoldingBuilder, DumbAware {
 
@@ -34,11 +26,7 @@ class RholangFoldingBuilder : FoldingBuilder, DumbAware {
 
     val elementType = psi.node.elementType
 
-    if (elementType === RhoTypes.BLOCK_DOC_COMMENT) {
-      val blockDocComment = psi.node
-      val range = TextRange(blockDocComment.textRange.startOffset + 3, blockDocComment.textRange.endOffset - 2)
-      descriptors.add(FoldingDescriptor(blockDocComment, range))
-    } else if (elementType === RhoTypes.PROC_BLOCK) {
+    if (elementType === RhoTypes.PROC_BLOCK) {
       val textRange = psi.node.textRange
       val textRange1 = TextRange(textRange.startOffset + 1, textRange.endOffset - 1)
       descriptors.add(FoldingDescriptor(psi.node, textRange1))
